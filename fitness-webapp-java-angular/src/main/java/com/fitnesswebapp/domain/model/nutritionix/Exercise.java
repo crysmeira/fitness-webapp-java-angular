@@ -1,4 +1,4 @@
-package com.fitnesswebapp.model.nutritionix;
+package com.fitnesswebapp.domain.model.nutritionix;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -25,18 +25,5 @@ public class Exercise {
 
 	@JsonProperty("nf_calories")
 	private long calories;
-
-	@Override
-	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("Exercise [exercise=");
-		builder.append(exercise);
-		builder.append(", duration=");
-		builder.append(duration);
-		builder.append(", calories=");
-		builder.append(calories);
-		builder.append("]");
-		return builder.toString();
-	}
 
 }

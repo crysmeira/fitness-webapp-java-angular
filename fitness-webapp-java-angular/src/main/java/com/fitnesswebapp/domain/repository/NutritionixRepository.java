@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 
 import com.fitnesswebapp.domain.exception.FitnessException;
-import com.fitnesswebapp.model.nutritionix.Exercise;
-import com.fitnesswebapp.model.nutritionix.Food;
-import com.fitnesswebapp.model.nutritionix.Nutrient;
+import com.fitnesswebapp.domain.model.nutritionix.Exercise;
+import com.fitnesswebapp.domain.model.nutritionix.Food;
+import com.fitnesswebapp.domain.model.nutritionix.Nutrient;
 
 /**
  * Interface for repository used to establish connection between Fitness Webapp and Nutritionix API in order to 

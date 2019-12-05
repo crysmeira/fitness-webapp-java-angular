@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.fitnesswebapp.domain.exception.FitnessException;
-import com.fitnesswebapp.domain.model.fitness.Profile;
 import com.fitnesswebapp.domain.model.fitness.User;
 import com.fitnesswebapp.domain.repository.UserRepository;
 import com.fitnesswebapp.domain.service.UserService;
@@ -64,25 +63,6 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return userRepository.findUserByEmail(email);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Profile getProfile(final String email) throws FitnessException {
-		final User user = getUser(email);
-		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500020, 
-					                   new String[] {email});
-		}
-
-		return new Profile.ProfileBuilder(email).setFirstName(user.getFirstName())
-				.setLastName(user.getLastName())
-				.setBirthDate(user.getBirthDate())
-				.setHeight(user.getHeight())
-				.setWeight(user.getWeight())
-				.build();
 	}
 
 	/**

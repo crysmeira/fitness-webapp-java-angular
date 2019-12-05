@@ -1,7 +1,7 @@
 package com.fitnesswebapp.domain.service;
 
+import com.fitnesswebapp.api.model.fitness.UserModel;
 import com.fitnesswebapp.domain.exception.FitnessException;
-import com.fitnesswebapp.domain.model.fitness.Profile;
 import com.fitnesswebapp.domain.model.fitness.User;
 
 /**
@@ -28,15 +28,6 @@ public interface UserService {
 	 * @throws FitnessException If email is null or empty.
 	 */
 	public User getUser(String email) throws FitnessException;
-
-	/**
-	 * Retrieves a {@link Profile} created based on a {@link User} for the given email address.
-	 *
-	 * @param email The email address.
-	 * @return The {@link Profile} with user information for user that matches the given email address.
-	 * @throws FitnessException If email is null or empty or if there is no user for the given email.
-	 */
-	public Profile getProfile(String email) throws FitnessException;
 
 	/**
 	 * Updates an existing {@link User}.

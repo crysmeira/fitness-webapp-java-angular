@@ -3,9 +3,9 @@ package com.fitnesswebapp.domain.service;
 import java.util.List;
 
 import com.fitnesswebapp.domain.exception.FitnessException;
-import com.fitnesswebapp.model.nutritionix.Exercise;
-import com.fitnesswebapp.model.nutritionix.Food;
-import com.fitnesswebapp.model.nutritionix.Nutrient;
+import com.fitnesswebapp.domain.model.nutritionix.Exercise;
+import com.fitnesswebapp.domain.model.nutritionix.Food;
+import com.fitnesswebapp.domain.model.nutritionix.Nutrient;
 
 /**
  * Interface for service to communicate with Nutritionix API.

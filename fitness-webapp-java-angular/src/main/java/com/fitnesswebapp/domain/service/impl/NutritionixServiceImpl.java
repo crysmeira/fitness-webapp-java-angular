@@ -11,11 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.fitnesswebapp.domain.exception.FitnessException;
+import com.fitnesswebapp.domain.model.nutritionix.Exercise;
+import com.fitnesswebapp.domain.model.nutritionix.Food;
+import com.fitnesswebapp.domain.model.nutritionix.Nutrient;
 import com.fitnesswebapp.domain.repository.NutritionixRepository;
 import com.fitnesswebapp.domain.service.NutritionixService;
-import com.fitnesswebapp.model.nutritionix.Exercise;
-import com.fitnesswebapp.model.nutritionix.Food;
-import com.fitnesswebapp.model.nutritionix.Nutrient;
 import com.fitnesswebapp.utils.ErrorCodes;
 import com.fitnesswebapp.utils.FitnessConstants;
 

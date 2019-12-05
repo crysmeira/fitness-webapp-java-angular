@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fitnesswebapp.api.assembler.fitness.UserInputDisassembler;
+import com.fitnesswebapp.api.assembler.fitness.UserModelAssembler;
+import com.fitnesswebapp.api.model.fitness.UserModel;
+import com.fitnesswebapp.api.model.fitness.input.UserInput;
 import com.fitnesswebapp.domain.exception.FitnessException;
-import com.fitnesswebapp.domain.model.fitness.Profile;
 import com.fitnesswebapp.domain.model.fitness.User;
 import com.fitnesswebapp.domain.service.UserService;
 import com.fitnesswebapp.utils.FitnessConstants;
@@ -29,55 +32,66 @@ import com.fitnesswebapp.utils.FitnessConstants;
 public class UserController {
 
 	private final UserService userService;
+	private final UserModelAssembler userModelAssembler;
+	private final UserInputDisassembler userInputDisassembler;
 
 	@Autowired
-	public UserController(@Qualifier(FitnessConstants.USER_SERVICE_BEAN) final UserService userService) {
+	public UserController(@Qualifier(FitnessConstants.USER_SERVICE_BEAN) final UserService userService,
+			final UserModelAssembler userModelAssembler,
+			final UserInputDisassembler userInputDisassembler) {
 		this.userService = userService;
+		this.userModelAssembler = userModelAssembler;
+		this.userInputDisassembler = userInputDisassembler;
 	}
 
 	/**
-	 * Creates a {@link User} by using the given user.
+	 * Creates a user.
 	 *
-	 * @param user The user to be saved.
-	 * @return The {@link User} saved.
+	 * @param userInput The user to be saved.
+	 * @return The user saved.
 	 * @throws FitnessException If user is null or empty or if there is already a user saved with the same 
 	 * email address.
 	 */
-	@PostMapping(value = "/registration")
+	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public User registerUser(@RequestBody final User user) throws FitnessException {
-		return userService.saveUser(user);
+	public UserModel registerUser(@RequestBody final UserInput userInput) throws FitnessException {
+		User user = userInputDisassembler.toDomainObject(userInput);
+		user = userService.saveUser(user);
+		return userModelAssembler.toModel(user);
 	}
 
 	/**
-	 * Retrieves a {@link Profile} based on the given email address.
+	 * Retrieves a user based on the given email address.
 	 *
 	 * @param email The email address.
-	 * @return The {@link Profile} for the user that matches the given email address.
+	 * @return The user that matches the given email address.
 	 * @throws FitnessException If email is null or empty.
 	 */
-	@GetMapping(value = "/profile/{email}")
-	public Profile getProfile(@PathVariable("email") final String email) throws FitnessException {
-		return userService.getProfile(email);
+	@GetMapping(value = "/{email}")
+	public UserModel getUserByEmail(@PathVariable("email") final String email) throws FitnessException {
+		User user = userService.getUser(email);
+		return userModelAssembler.toModel(user);
 	}
 
 	/**
-	 * Updates an existing {@link User}.
+	 * Updates an existing user.
 	 *
 	 * @param user The user to be updated.
-	 * @return The {@link User} updated.
+	 * @return The user updated.
 	 * @throws FitnessException If user is null or empty.
 	 */
 	@PutMapping
-	public User updateUser(@RequestBody final User user) throws FitnessException {
-		return userService.updateUser(user);
+	public UserModel updateUser(@RequestBody final UserInput userInput) throws FitnessException {
+		User user = userInputDisassembler.toDomainObject(userInput);
+		user = userService.updateUser(user);
+		return userModelAssembler.toModel(user);
 	}
 
 	/**
-	 * Retrieves a {@link User} based on the given email address.
+	 * Retrieves a user based on the given email address.
 	 *
 	 * @param email The email address.
-	 * @return The {@link User} that matches the given email address.
+	 * @return The user that matches the given email address.
 	 * @throws FitnessException If email is null or empty.
 	 */
 	@DeleteMapping(value = "/{email}")

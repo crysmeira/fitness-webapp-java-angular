@@ -1,4 +1,4 @@
-package com.fitnesswebapp.model.nutritionix;
+package com.fitnesswebapp.domain.model.nutritionix;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,30 +43,5 @@ public class Nutrient {
 
 	@JsonProperty("nf_protein")
 	private Long totalProtein;
-
-	@Override
-	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("Nutrient [nixItemId=");
-		builder.append(nixItemId);
-		builder.append(", foodName=");
-		builder.append(foodName);
-		builder.append(", servingUnit=");
-		builder.append(servingUnit);
-		builder.append(", servingQuantity=");
-		builder.append(servingQuantity);
-		builder.append(", servingWeightGrams=");
-		builder.append(servingWeightGrams);
-		builder.append(", calories=");
-		builder.append(calories);
-		builder.append(", totalFat=");
-		builder.append(totalFat);
-		builder.append(", totalCarbohydrate=");
-		builder.append(totalCarbohydrate);
-		builder.append(", totalProtein=");
-		builder.append(totalProtein);
-		builder.append("]");
-		return builder.toString();
-	}
-
+	
 }

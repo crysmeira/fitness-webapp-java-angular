@@ -1,4 +1,4 @@
-package com.fitnesswebapp.model.nutritionix;
+package com.fitnesswebapp.domain.model.nutritionix;
 
 import java.util.List;
 
@@ -19,14 +19,5 @@ import lombok.Data;
 public class BrandedFood {
 
 	private List<Food> branded;
-
-	@Override
-	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("BrandedFood [branded=");
-		builder.append(branded);
-		builder.append("]");
-		return builder.toString();
-	}
 
 }

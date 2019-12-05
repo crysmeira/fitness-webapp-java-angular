@@ -96,10 +96,6 @@ public class User {
 		builder.append(enabled);
 		builder.append(", roles=");
 		builder.append(roles);
-		builder.append(", exerciseDiaryEntries=");
-		builder.append(exerciseDiaryEntries);
-		builder.append(", foodDiaries=");
-		builder.append(foodDiaries);
 		builder.append("]");
 		return builder.toString();
 	}
