@@ -14,4 +14,6 @@ public final class BeanNames {
 	public static final String NUTRITIONIX_REPOSITORY = "nutritionixRepository";
 	
 	public static final String USER_SERVICE = "userService";
+	
+	public static final String FOOD_DIARY_SERVICE = "foodDiaryService";
 }

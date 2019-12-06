@@ -2,6 +2,9 @@ package com.fitnesswebapp.api.model.fitness;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import lombok.Data;
 
 /**
@@ -10,6 +13,7 @@ import lombok.Data;
  * @author Crystiane Meira
  */
 @Data
+@JsonInclude(content = Include.NON_NULL)
 public class ExerciseDiaryEntryModel {
 
 	private long exerciseDiaryId;
