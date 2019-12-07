@@ -26,6 +26,7 @@ import com.fitnesswebapp.domain.model.nutritionix.Food;
 import com.fitnesswebapp.domain.model.nutritionix.Nutrient;
 import com.fitnesswebapp.domain.repository.NutritionixRepository;
 import com.fitnesswebapp.domain.repository.UserRepository;
+import com.fitnesswebapp.utils.BeanNames;
 import com.fitnesswebapp.utils.ErrorCodes;
 import com.fitnesswebapp.utils.FitnessConstants;
 import com.fitnesswebapp.utils.UserHelper;
@@ -35,7 +36,7 @@ import com.fitnesswebapp.utils.UserHelper;
  *
  * @author Crystiane Meira
  */
-@Repository(FitnessConstants.NUTRITIONIX_REPOSITORY_BEAN)
+@Repository(BeanNames.NUTRITIONIX_REPOSITORY)
 public class NutritionixRepositoryImpl implements NutritionixRepository {
 
 	private static final Logger logger = LogManager.getLogger(NutritionixRepository.class);
@@ -45,7 +46,7 @@ public class NutritionixRepositoryImpl implements NutritionixRepository {
 
 	@Autowired
 	public NutritionixRepositoryImpl(final UserRepository usersRepository,
-			                         @Qualifier(FitnessConstants.NUTRITIONIX_CONFIG_BEAN) final NutritionixConfig nutritionixConfig) {
+			                         @Qualifier(BeanNames.NUTRITIONIX_CONFIG) final NutritionixConfig nutritionixConfig) {
 		this.nutritionixConfig = nutritionixConfig;
 		userRepository = usersRepository;
 	}

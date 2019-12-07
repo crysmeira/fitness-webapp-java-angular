@@ -14,6 +14,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 
 import com.fitnesswebapp.core.config.props.NutritionixConfigProps;
+import com.fitnesswebapp.utils.BeanNames;
 import com.fitnesswebapp.utils.FitnessConstants;
 import com.google.common.base.Charsets;
 
@@ -22,14 +23,14 @@ import com.google.common.base.Charsets;
  *
  * @author Crystiane Meira
  */
-@Configuration(FitnessConstants.NUTRITIONIX_CONFIG_BEAN)
+@Configuration(BeanNames.NUTRITIONIX_CONFIG)
 public class NutritionixConfig {
 
 	private final NutritionixConfigProps nutritionixConfig;
 
 	@Autowired
 	public NutritionixConfig(
-			@Qualifier(FitnessConstants.NUTRITIONIX_CONFIG_PROPS) final NutritionixConfigProps nutritionixConfig) {
+			@Qualifier(BeanNames.NUTRITIONIX_CONFIG_PROPS) final NutritionixConfigProps nutritionixConfig) {
 		this.nutritionixConfig = nutritionixConfig;
 	}
 	

@@ -1,10 +1,15 @@
 package com.fitnesswebapp.domain.model.fitness;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.Data;
 
@@ -39,6 +44,13 @@ public class FoodDiaryEntry {
 
 	@Column(name = "total_protein")
 	private Double totalProtein;
+	
+	@Column(name = "date")
+	private LocalDate date;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 
 	@Override
 	public String toString() {
@@ -57,6 +69,8 @@ public class FoodDiaryEntry {
 		builder.append(totalFat);
 		builder.append(", totalProtein=");
 		builder.append(totalProtein);
+		builder.append(", date=");
+		builder.append(date);
 		builder.append("]");
 		return builder.toString();
 	}

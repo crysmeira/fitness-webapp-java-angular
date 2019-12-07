@@ -72,7 +72,7 @@ public class User {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<FoodDiary> foodDiaries;
+	private List<FoodDiaryEntry> foodDiaryEntries;
 
 	@Override
 	public String toString() {

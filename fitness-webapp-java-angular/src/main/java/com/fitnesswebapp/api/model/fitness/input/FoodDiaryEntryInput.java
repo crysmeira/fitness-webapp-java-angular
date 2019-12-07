@@ -10,8 +10,6 @@ import lombok.Data;
 @Data
 public class FoodDiaryEntryInput {
 
-	private Long foodDiaryEntryId;
-
 	private String id;
 	private String foodName;
 	private Double calories;

@@ -11,15 +11,15 @@ import com.fitnesswebapp.domain.exception.FitnessException;
 import com.fitnesswebapp.domain.model.fitness.User;
 import com.fitnesswebapp.domain.repository.UserRepository;
 import com.fitnesswebapp.domain.service.UserService;
+import com.fitnesswebapp.utils.BeanNames;
 import com.fitnesswebapp.utils.ErrorCodes;
-import com.fitnesswebapp.utils.FitnessConstants;
 
 /**
  * Implementation of {@link UserService}.
  *
  * @author Crystiane Meira
  */
-@Component(FitnessConstants.USER_SERVICE_BEAN)
+@Component(BeanNames.USER_SERVICE)
 public class UserServiceImpl implements UserService {
 
 	private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);

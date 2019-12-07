@@ -20,7 +20,7 @@ import com.fitnesswebapp.domain.model.nutritionix.Exercise;
 import com.fitnesswebapp.domain.model.nutritionix.Food;
 import com.fitnesswebapp.domain.model.nutritionix.Nutrient;
 import com.fitnesswebapp.domain.service.NutritionixService;
-import com.fitnesswebapp.utils.FitnessConstants;
+import com.fitnesswebapp.utils.BeanNames;
 
 /**
  * This controller receives requests that require communication with Nutritionix API.
@@ -38,7 +38,7 @@ public class NutritionixController {
 
 	@Autowired
 	public NutritionixController(
-			@Qualifier(FitnessConstants.NUTRITIONIX_SERVICE_BEAN) final NutritionixService nutritionixService,
+			@Qualifier(BeanNames.NUTRITIONIX_SERVICE) final NutritionixService nutritionixService,
 			final NutrientModelAssembler nutrientModelAssembler,
 			final FoodModelAssembler foodModelAssembler,
 			final ExerciseModelAssembler exerciseModelAssembler) {

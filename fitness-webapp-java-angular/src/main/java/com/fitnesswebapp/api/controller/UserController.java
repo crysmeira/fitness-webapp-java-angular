@@ -20,7 +20,7 @@ import com.fitnesswebapp.api.model.fitness.input.UserInput;
 import com.fitnesswebapp.domain.exception.FitnessException;
 import com.fitnesswebapp.domain.model.fitness.User;
 import com.fitnesswebapp.domain.service.UserService;
-import com.fitnesswebapp.utils.FitnessConstants;
+import com.fitnesswebapp.utils.BeanNames;
 
 /**
  * Handles the requests to Fitness Webapp for user operations.
@@ -36,7 +36,7 @@ public class UserController {
 	private final UserInputDisassembler userInputDisassembler;
 
 	@Autowired
-	public UserController(@Qualifier(FitnessConstants.USER_SERVICE_BEAN) final UserService userService,
+	public UserController(@Qualifier(BeanNames.USER_SERVICE) final UserService userService,
 			final UserModelAssembler userModelAssembler,
 			final UserInputDisassembler userInputDisassembler) {
 		this.userService = userService;

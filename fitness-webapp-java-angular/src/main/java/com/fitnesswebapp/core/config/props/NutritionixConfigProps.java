@@ -3,7 +3,7 @@ package com.fitnesswebapp.core.config.props;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import com.fitnesswebapp.utils.FitnessConstants;
+import com.fitnesswebapp.utils.BeanNames;
 
 import lombok.Data;
 
@@ -13,7 +13,7 @@ import lombok.Data;
  * @author Crystiane Meira
  */
 @Data
-@Component(FitnessConstants.NUTRITIONIX_CONFIG_PROPS)
+@Component(BeanNames.NUTRITIONIX_CONFIG_PROPS)
 @ConfigurationProperties(prefix = "nutritionix")
 public class NutritionixConfigProps {
 
@@ -22,18 +22,5 @@ public class NutritionixConfigProps {
 	private String appKey;
 
 	private String remoteUserId;
-
-	@Override
-	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("NutritionixConfigProps [appId=");
-		builder.append(appId);
-		builder.append(", appKey=");
-		builder.append(appKey);
-		builder.append(", remoteUserId=");
-		builder.append(remoteUserId);
-		builder.append("]");
-		return builder.toString();
-	}
 
 }

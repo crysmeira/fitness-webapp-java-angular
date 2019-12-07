@@ -16,22 +16,22 @@ import com.fitnesswebapp.domain.model.nutritionix.Food;
 import com.fitnesswebapp.domain.model.nutritionix.Nutrient;
 import com.fitnesswebapp.domain.repository.NutritionixRepository;
 import com.fitnesswebapp.domain.service.NutritionixService;
+import com.fitnesswebapp.utils.BeanNames;
 import com.fitnesswebapp.utils.ErrorCodes;
-import com.fitnesswebapp.utils.FitnessConstants;
 
 /**
  * Implementation of {@link NutritionixService}.
  *
  * @author Crystiane Meira
  */
-@Service(FitnessConstants.NUTRITIONIX_SERVICE_BEAN)
+@Service(BeanNames.NUTRITIONIX_SERVICE)
 public class NutritionixServiceImpl implements NutritionixService {
 
 	private final NutritionixRepository nutritionixRepository;
 
 	@Autowired
 	public NutritionixServiceImpl(
-			@Qualifier(FitnessConstants.NUTRITIONIX_REPOSITORY_BEAN) final NutritionixRepository nutritionixRepository) {
+			@Qualifier(BeanNames.NUTRITIONIX_REPOSITORY) final NutritionixRepository nutritionixRepository) {
 		this.nutritionixRepository = nutritionixRepository;
 	}
 

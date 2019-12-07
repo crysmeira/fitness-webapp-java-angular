@@ -9,14 +9,6 @@ public class FitnessConstants {
 
 	private FitnessConstants() {} // avoid instantiation
 
-	public static final String NUTRITIONIX_CONFIG_BEAN = "nutritionixConfig";
-	public static final String NUTRITIONIX_CONFIG_PROPS = "nutritionixConfigProps";
-
-	public static final String NUTRITIONIX_SERVICE_BEAN = "nutritionixService";
-	public static final String USER_SERVICE_BEAN = "userService";
-
-	public static final String NUTRITIONIX_REPOSITORY_BEAN = "nutritionixRepository";
-
 	public static final String SLASH = "/";
 
 	public static final String NUTRITIONIX_BASE_URL = "https://trackapi.nutritionix.com";

@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Data;
 
 /**
@@ -29,15 +27,12 @@ public class ExerciseDiaryEntry {
 	@Column(name = "exercise_diary_id")
 	private long exerciseDiaryId;
 
-	@JsonProperty("name")
 	@Column(name = "exercise")
 	private String exercise;
 
-	@JsonProperty("duration_min")
 	@Column(name = "duration")
 	private int duration;
 
-	@JsonProperty("nf_calories")
 	@Column(name = "calories")
 	private long calories;
 

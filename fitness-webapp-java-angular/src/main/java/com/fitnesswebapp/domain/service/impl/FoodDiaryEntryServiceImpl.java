@@ -1,43 +1,47 @@
 package com.fitnesswebapp.domain.service.impl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.fitnesswebapp.domain.exception.FitnessException;
-import com.fitnesswebapp.domain.model.fitness.FoodDiary;
 import com.fitnesswebapp.domain.model.fitness.FoodDiaryEntry;
 import com.fitnesswebapp.domain.model.fitness.User;
-import com.fitnesswebapp.domain.repository.FoodDiaryRepository;
-import com.fitnesswebapp.domain.service.FoodDiaryService;
+import com.fitnesswebapp.domain.repository.FoodDiaryEntryRepository;
+import com.fitnesswebapp.domain.service.FoodDiaryEntryService;
 import com.fitnesswebapp.utils.BeanNames;
 import com.fitnesswebapp.utils.ErrorCodes;
 
 /**
- * Implementation of {@link FoodDiaryService}.
+ * Implementation of {@link FoodDiaryEntryService}.
  *
  * @author Crystiane Meira
  */
 @Service(BeanNames.FOOD_DIARY_SERVICE)
-public class FoodDiaryServiceImpl implements FoodDiaryService {
+public class FoodDiaryEntryServiceImpl implements FoodDiaryEntryService {
 
-	private static final Logger logger = LogManager.getLogger(FoodDiaryServiceImpl.class);
+	private static final Logger logger = LogManager.getLogger(FoodDiaryEntryServiceImpl.class);
 
-	private final FoodDiaryRepository foodDiaryRepository;
+	private final FoodDiaryEntryRepository foodDiaryEntryRepository;
 
-	public FoodDiaryServiceImpl(final FoodDiaryRepository diaryRepository) {
-		foodDiaryRepository = diaryRepository;
+	@Autowired
+	public FoodDiaryEntryServiceImpl(final FoodDiaryEntryRepository foodDiaryEntryRepository) {
+		this.foodDiaryEntryRepository = foodDiaryEntryRepository;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public FoodDiary saveFoodDiary(final List<FoodDiaryEntry> foodDiaryEntries, final User user) throws FitnessException {
+	public List<FoodDiaryEntry> saveFoodDiaryEntries(final List<FoodDiaryEntry> foodDiaryEntries, final User user) throws FitnessException {
 		if (foodDiaryEntries == null || foodDiaryEntries.isEmpty()) {
 			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500007);
 		}
@@ -51,19 +55,20 @@ public class FoodDiaryServiceImpl implements FoodDiaryService {
 			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500008, new String[] {today.toString()});
 		}
 
-		final FoodDiary diary = new FoodDiary();
-		diary.setFoodDiaryEntries(foodDiaryEntries);
-		diary.setDate(today);
-		diary.setUser(user);
-
-		return foodDiaryRepository.save(diary);
+		return foodDiaryEntries.stream()
+							.map(foodDiaryEntry -> {
+								foodDiaryEntry.setDate(LocalDate.now());
+								foodDiaryEntry.setUser(user);
+								return foodDiaryEntryRepository.save(foodDiaryEntry);
+							})
+							.collect(Collectors.toList());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public FoodDiary getFoodDiaryForToday(final User user) throws FitnessException {
+	public List<FoodDiaryEntry> getFoodDiaryEntriesForToday(final User user) throws FitnessException {
 		if (user == null) {
 			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500017);
 		}
@@ -71,21 +76,20 @@ public class FoodDiaryServiceImpl implements FoodDiaryService {
 		final LocalDate today = LocalDate.now();
 		logger.debug("Retrieving food diary for day: {}.", today);
 
-		FoodDiary foodDiary = foodDiaryRepository.findFoodDiaryByUserAndDate(user.getUserId(), today);
-		if (foodDiary == null) {
-			foodDiary = new FoodDiary();
+		List<FoodDiaryEntry> foodDiaryEntries = foodDiaryEntryRepository.findFoodDiaryEntryByUserAndDate(user.getUserId(), today);
+		if (foodDiaryEntries == null) {
+			foodDiaryEntries = new ArrayList<>();
 		}
 
-		return foodDiary;
+		return foodDiaryEntries;
 	}
 
 	/*
 	 * Checks if there is already a food diary saved in the database for the current day.
-	 *
 	 */
 	private boolean isThereFoodDiaryForToday(final Long userId, final LocalDate today) {
 		logger.debug("Checking if there is already a food diary for date {}.", today);
 
-		return foodDiaryRepository.findFoodDiaryByUserAndDate(userId, today) != null;
+		return !CollectionUtils.isEmpty(foodDiaryEntryRepository.findFoodDiaryEntryByUserAndDate(userId, today));
 	}
 }

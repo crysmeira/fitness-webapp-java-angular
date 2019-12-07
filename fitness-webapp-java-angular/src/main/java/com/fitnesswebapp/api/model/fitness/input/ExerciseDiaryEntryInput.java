@@ -1,7 +1,5 @@
 package com.fitnesswebapp.api.model.fitness.input;
 
-import java.time.LocalDate;
-
 import lombok.Data;
 
 /**
@@ -12,10 +10,8 @@ import lombok.Data;
 @Data
 public class ExerciseDiaryEntryInput {
 
-	private long exerciseDiaryId;
 	private String exercise;
 	private int duration;
 	private long calories;
-	private LocalDate date;
 
 }
