@@ -9,8 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.fitnesswebapp.api.model.fitness.input.FoodDiaryEntryInput;
 import com.fitnesswebapp.domain.model.fitness.FoodDiaryEntry;
+import com.fitnesswebapp.utils.BeanNames;
 
-@Component
+@Component(BeanNames.FOOD_DIARY_ENTRY_INPUT_DISASSEMBLER)
 public class FoodDiaryEntryInputDisassembler {
 
 	@Autowired

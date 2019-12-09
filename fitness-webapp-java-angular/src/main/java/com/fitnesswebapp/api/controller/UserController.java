@@ -37,8 +37,8 @@ public class UserController {
 
 	@Autowired
 	public UserController(@Qualifier(BeanNames.USER_SERVICE) final UserService userService,
-			final UserModelAssembler userModelAssembler,
-			final UserInputDisassembler userInputDisassembler) {
+			@Qualifier(BeanNames.USER_MODEL_ASSEMBLER) final UserModelAssembler userModelAssembler,
+			@Qualifier(BeanNames.USER_INPUT_DISASSEMBLER) final UserInputDisassembler userInputDisassembler) {
 		this.userService = userService;
 		this.userModelAssembler = userModelAssembler;
 		this.userInputDisassembler = userInputDisassembler;

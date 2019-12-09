@@ -25,7 +25,7 @@ import com.fitnesswebapp.utils.ErrorCodes;
  *
  * @author Crystiane Meira
  */
-@Service(BeanNames.FOOD_DIARY_SERVICE)
+@Service(BeanNames.FOOD_DIARY_ENTRY_SERVICE)
 public class FoodDiaryEntryServiceImpl implements FoodDiaryEntryService {
 
 	private static final Logger logger = LogManager.getLogger(FoodDiaryEntryServiceImpl.class);

@@ -9,8 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.fitnesswebapp.api.model.nutritionix.FoodModel;
 import com.fitnesswebapp.domain.model.nutritionix.Food;
+import com.fitnesswebapp.utils.BeanNames;
 
-@Component
+@Component(BeanNames.FOOD_MODEL_ASSEMBLER)
 public class FoodModelAssembler {
 
 	@Autowired

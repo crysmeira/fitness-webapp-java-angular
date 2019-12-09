@@ -1,7 +1,6 @@
 package com.fitnesswebapp.api.assembler.fitness;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -10,8 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.fitnesswebapp.api.model.fitness.FoodDiaryEntryModel;
 import com.fitnesswebapp.domain.model.fitness.FoodDiaryEntry;
+import com.fitnesswebapp.utils.BeanNames;
 
-@Component
+@Component(BeanNames.FOOD_DIARY_ENTRY_MODEL_ASSEMBLER)
 public class FoodDiaryEntryModelAssembler {
 
 	@Autowired

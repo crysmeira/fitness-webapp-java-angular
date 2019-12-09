@@ -82,6 +82,7 @@ public class UserServiceImpl implements UserService {
 			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500021);
 		}
 
+		// FIXME: modify it
 		retrievedUser.setBirthDate(user.getBirthDate());
 		retrievedUser.setFirstName(user.getFirstName());
 		retrievedUser.setLastName(user.getLastName());

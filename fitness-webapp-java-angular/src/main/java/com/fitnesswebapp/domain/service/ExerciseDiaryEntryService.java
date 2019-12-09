@@ -7,7 +7,7 @@ import com.fitnesswebapp.domain.model.fitness.ExerciseDiaryEntry;
 import com.fitnesswebapp.domain.model.fitness.User;
 
 /**
- * Interface for service to operate on exercise diary objects.
+ * Interface for service to operate on exercise diary entry objects.
  *
  * @author Crystiane Meira
  */
@@ -18,17 +18,17 @@ public interface ExerciseDiaryEntryService {
 	 *
 	 * @param exerciseDiaryEntry The exercise diary entry containing information for an exercise.
 	 * @param user The user logged in.
-	 * @return The ExerciseDiaryEntry saved using the given exercise diary entry.
-	 * @throws FitnessException If exerciseDiaryEntry or user is null.
+	 * @return The {@link ExerciseDiaryEntry} saved using the given exercise diary entry.
+	 * @throws FitnessException If {@code exerciseDiaryEntry} or {@code user} is null.
 	 */
 	public ExerciseDiaryEntry saveExerciseDiaryEntry(ExerciseDiaryEntry exerciseDiaryEntry, User user) throws FitnessException;
 
 	/**
-	 * Gets the exercise diary for the current day.
+	 * Gets the exercise diary entries for the current day.
 	 *
 	 * @param user The user logged in.
-	 * @return The FoodDiary or null if there is no exercise diary for the current day.
-	 * @throws FitnessException If user is null.
+	 * @return A list containing the exercise diary entries for the current day or null if there is no exercise diary entry.
+	 * @throws FitnessException If {@code user} is null.
 	 */
 	public List<ExerciseDiaryEntry> getExerciseDiaryForToday(User user) throws FitnessException;
 }

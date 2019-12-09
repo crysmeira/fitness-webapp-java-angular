@@ -6,8 +6,9 @@ import org.springframework.stereotype.Component;
 
 import com.fitnesswebapp.api.model.nutritionix.NutrientModel;
 import com.fitnesswebapp.domain.model.nutritionix.Nutrient;
+import com.fitnesswebapp.utils.BeanNames;
 
-@Component
+@Component(BeanNames.NUTRIENT_MODEL_ASSEMBLER)
 public class NutrientModelAssembler {
 
 	@Autowired

@@ -23,4 +23,9 @@ public class FitnessConstants {
 	public static final String NUTRITIONIX_NUTRITION_FOODS_ARRAY = "foods";
 	public static final String NUTRITIONIX_EXERCISES_ARRAY = "exercises";
 
+	public static final String STATISTICS_CALORIES = "calories";
+	public static final String STATISTICS_CARBOHYDRATE = "carbohydrate";
+	public static final String STATISTICS_FAT = "fat";
+	public static final String STATISTICS_PROTEIN = "protein";
+	public static final String STATISTICS_DURATION = "duration";
 }

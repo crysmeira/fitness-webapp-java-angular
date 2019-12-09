@@ -8,7 +8,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import com.fitnesswebapp.domain.model.fitness.User;
 
 /**
- * Repository for User object.
+ * Repository for {@link User} object.
  *
  * @author Crystiane Meira
  */

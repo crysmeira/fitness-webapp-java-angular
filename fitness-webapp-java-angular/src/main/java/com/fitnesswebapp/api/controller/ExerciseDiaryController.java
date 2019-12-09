@@ -38,10 +38,12 @@ public class ExerciseDiaryController {
 
 	@Autowired
 	public ExerciseDiaryController(
-			@Qualifier(BeanNames.EXERCISE_DIARY_SERVICE) final ExerciseDiaryEntryService fitnessService,
+			@Qualifier(BeanNames.EXERCISE_DIARY_ENTRY_SERVICE) final ExerciseDiaryEntryService fitnessService,
 			@Qualifier(BeanNames.USER_SERVICE) final UserService userService,
-			ExerciseDiaryEntryModelAssembler exerciseDiaryEntryModelAssembler,
-			ExerciseDiaryEntryInputDisassembler exerciseDiaryEntryInputDisassembler) {
+			@Qualifier(BeanNames.EXERCISE_DIARY_ENTRY_MODEL_ASSEMBLER) 
+				ExerciseDiaryEntryModelAssembler exerciseDiaryEntryModelAssembler,
+			@Qualifier(BeanNames.EXERCISE_DIARY_ENTRY_INPUT_DISASSEMBLER) 
+				ExerciseDiaryEntryInputDisassembler exerciseDiaryEntryInputDisassembler) {
 		this.exerciseDiaryService = fitnessService;
 		this.userService = userService;
 		this.exerciseDiaryEntryModelAssembler = exerciseDiaryEntryModelAssembler;
@@ -49,19 +51,18 @@ public class ExerciseDiaryController {
 	}
 
 	/**
-	 * Creates a {@link ExerciseDiaryEntry} by using the given exercise entry.
+	 * Creates an exercise diary entry by using the given exercise entry.
 	 *
 	 * @param exerciseDiaryEntryInput The object containing information about the exercise.
 	 * @param userEmail The email address for the user logged in.
-	 * @return The {@link ExerciseDiaryEntry} saved.
-	 * @throws FitnessException If exerciseDiary is null, if userEmail is null or empty, or if a user is not found for
+	 * @return The exercise diary entry saved.
+	 * @throws FitnessException If {@code exerciseDiary} is null, if userEmail is null or empty, or if a user is not found for
 	 * the given email.
 	 */
 	@PostMapping(value = "/{email}")
 	public ExerciseDiaryEntryModel saveExerciseDiary(
 			@RequestBody final ExerciseDiaryEntryInput exerciseDiaryEntryInput, 
-			@PathVariable("email") final String userEmail)
-					throws FitnessException {
+			@PathVariable("email") final String userEmail) throws FitnessException {
 		final User user = userService.getUser(userEmail);
 		ExerciseDiaryEntry exerciseDiaryEntry = exerciseDiaryEntryInputDisassembler.toDomainObject(exerciseDiaryEntryInput);
 		exerciseDiaryEntry = exerciseDiaryService.saveExerciseDiaryEntry(exerciseDiaryEntry, user);
@@ -72,9 +73,9 @@ public class ExerciseDiaryController {
 	 * Gets the exercise diary for the current day.
 	 *
 	 * @param userEmail The email address for the user logged in.
-	 * @return The {@link ExerciseDiary} for the current day. If none exercise diary is found for the current day, 
+	 * @return The exercise diary entry for the current day. If no exercise diary is found for the current day, 
 	 * return null.
-	 * @throws FitnessException If userEmail is null or empty or if a user is not found for the given email.
+	 * @throws FitnessException If {@code userEmail} is null or empty or if a user is not found for the given email.
 	 */
 	@GetMapping(value = "/{email}")
 	public List<ExerciseDiaryEntryModel> getExerciseDiaryForToday(@PathVariable("email") final String userEmail) 

@@ -22,7 +22,7 @@ import com.fitnesswebapp.utils.ErrorCodes;
  *
  * @author Crystiane Meira
  */
-@Service(BeanNames.EXERCISE_DIARY_SERVICE)
+@Service(BeanNames.EXERCISE_DIARY_ENTRY_SERVICE)
 public class ExerciseDiaryEntryServiceImpl implements ExerciseDiaryEntryService {
 
 	private static final Logger logger = LogManager.getLogger(ExerciseDiaryEntryServiceImpl.class);
@@ -38,7 +38,8 @@ public class ExerciseDiaryEntryServiceImpl implements ExerciseDiaryEntryService 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ExerciseDiaryEntry saveExerciseDiaryEntry(final ExerciseDiaryEntry exerciseDiaryEntry, final User user) throws FitnessException {
+	public ExerciseDiaryEntry saveExerciseDiaryEntry(final ExerciseDiaryEntry exerciseDiaryEntry, final User user) 
+			throws FitnessException {
 		if (exerciseDiaryEntry == null) {
 			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500006);
 		}

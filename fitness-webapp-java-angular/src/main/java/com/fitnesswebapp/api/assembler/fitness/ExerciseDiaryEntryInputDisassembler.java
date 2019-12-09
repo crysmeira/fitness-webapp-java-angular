@@ -6,8 +6,9 @@ import org.springframework.stereotype.Component;
 
 import com.fitnesswebapp.api.model.fitness.input.ExerciseDiaryEntryInput;
 import com.fitnesswebapp.domain.model.fitness.ExerciseDiaryEntry;
+import com.fitnesswebapp.utils.BeanNames;
 
-@Component
+@Component(BeanNames.EXERCISE_DIARY_ENTRY_INPUT_DISASSEMBLER)
 public class ExerciseDiaryEntryInputDisassembler {
 
 	@Autowired

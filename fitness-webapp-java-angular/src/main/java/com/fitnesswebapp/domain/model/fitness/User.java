@@ -5,15 +5,10 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -58,14 +53,6 @@ public class User {
 	@Column(name = "enabled")
 	private Boolean enabled;
 
-//	@Convert(converter = UserRoleConverter.class)
-//	@OneToMany(cascade = {CascadeType.ALL})
-	@ElementCollection(targetClass = UserRole.class)
-	@JoinTable(name = "user_user_role", joinColumns = @JoinColumn(name = "user_id"))
-	@Column(name = "role", nullable = false)
-	@Enumerated(EnumType.STRING)
-	private List<UserRole> roles;
-
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<ExerciseDiaryEntry> exerciseDiaryEntries;
@@ -94,8 +81,6 @@ public class User {
 		builder.append(height);
 		builder.append(", enabled=");
 		builder.append(enabled);
-		builder.append(", roles=");
-		builder.append(roles);
 		builder.append("]");
 		return builder.toString();
 	}

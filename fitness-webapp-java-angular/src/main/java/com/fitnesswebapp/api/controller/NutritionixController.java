@@ -39,9 +39,9 @@ public class NutritionixController {
 	@Autowired
 	public NutritionixController(
 			@Qualifier(BeanNames.NUTRITIONIX_SERVICE) final NutritionixService nutritionixService,
-			final NutrientModelAssembler nutrientModelAssembler,
-			final FoodModelAssembler foodModelAssembler,
-			final ExerciseModelAssembler exerciseModelAssembler) {
+			@Qualifier(BeanNames.NUTRIENT_MODEL_ASSEMBLER) final NutrientModelAssembler nutrientModelAssembler,
+			@Qualifier(BeanNames.FOOD_MODEL_ASSEMBLER) final FoodModelAssembler foodModelAssembler,
+			@Qualifier(BeanNames.EXERCISE_MODEL_ASSEMBLER) final ExerciseModelAssembler exerciseModelAssembler) {
 		this.nutritionixService = nutritionixService;
 		this.nutrientModelAssembler = nutrientModelAssembler;
 		this.foodModelAssembler = foodModelAssembler;

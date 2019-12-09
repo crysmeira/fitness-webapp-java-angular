@@ -9,8 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.fitnesswebapp.api.model.fitness.ExerciseDiaryEntryModel;
 import com.fitnesswebapp.domain.model.fitness.ExerciseDiaryEntry;
+import com.fitnesswebapp.utils.BeanNames;
 
-@Component
+@Component(BeanNames.EXERCISE_DIARY_ENTRY_MODEL_ASSEMBLER)
 public class ExerciseDiaryEntryModelAssembler {
 
 	@Autowired

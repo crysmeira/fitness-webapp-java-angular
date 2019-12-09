@@ -10,7 +10,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import com.fitnesswebapp.domain.model.fitness.ExerciseDiaryEntry;
 
 /**
- * Repository for ExerciseDiaryEntry object.
+ * Repository for {@link ExerciseDiaryEntry} object.
  *
  * @author Crystiane Meira
  */

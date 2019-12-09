@@ -37,10 +37,11 @@ public class FoodDiaryController {
 	private final FoodDiaryEntryInputDisassembler foodDiaryEntryInputDisassembler;
 
 	@Autowired
-	public FoodDiaryController(@Qualifier(BeanNames.FOOD_DIARY_SERVICE) final FoodDiaryEntryService fitnessService,
+	public FoodDiaryController(@Qualifier(BeanNames.FOOD_DIARY_ENTRY_SERVICE) final FoodDiaryEntryService fitnessService,
 			@Qualifier(BeanNames.USER_SERVICE) final UserService userService,
-			FoodDiaryEntryModelAssembler foodDiaryEntryModelAssembler,
-			FoodDiaryEntryInputDisassembler foodDiaryEntryInputDisassembler) {
+			@Qualifier(BeanNames.FOOD_DIARY_ENTRY_MODEL_ASSEMBLER) FoodDiaryEntryModelAssembler foodDiaryEntryModelAssembler,
+			@Qualifier(BeanNames.FOOD_DIARY_ENTRY_INPUT_DISASSEMBLER) 
+				FoodDiaryEntryInputDisassembler foodDiaryEntryInputDisassembler) {
 		this.foodDiaryService = fitnessService;
 		this.userService = userService;
 		this.foodDiaryEntryModelAssembler = foodDiaryEntryModelAssembler;
@@ -48,13 +49,13 @@ public class FoodDiaryController {
 	}
 
 	/**
-	 * Creates a {@link FoodDiary} by using the given food diary entries.
+	 * Saves the food diary entries.
 	 *
-	 * @param foodDiaryEntries A list containing the diary entries to be saved.
+	 * @param foodDiaryEntries A list containing the food diary entries to be saved.
 	 * @param userEmail The email address for the user logged in.
-	 * @return The {@link FoodDiary} saved.
-	 * @throws FitnessException If foodDiaryEntries or userEmail is null or empty, if there is already a food diary saved for the
-	 * same day or if a user is not found for the given email.
+	 * @return A list containing the food diary entries saved.
+	 * @throws FitnessException If {@code foodDiaryEntries} or {@code userEmail} is null or empty, if there is already a food
+	 * diary saved for the same day or if a user is not found for the given email.
 	 */
 	@PostMapping(value = "/{email}")
 	public List<FoodDiaryEntryModel> saveFoodDiaryEntries(@RequestBody final List<FoodDiaryEntryInput> foodDiaryEntriesInput, 
@@ -65,14 +66,15 @@ public class FoodDiaryController {
 	}
 
 	/**
-	 * Gets the food diary for the current day.
+	 * Gets the food diary entries for the current day.
 	 *
 	 * @param userEmail The email address for the user logged in.
-	 * @return The {@link FoodDiary} for the current day. If none food diary is found for the current day, return null.
-	 * @throws FitnessException If userEmail is null or empty or if a user is not found for the given email.
+	 * @return A list of food diary entries for the current day. If no food diary is found for the current day, return null.
+	 * @throws FitnessException If {@code userEmail} is null or empty or if a user is not found for the given email.
 	 */
 	@GetMapping(value = "/{email}")
-	public List<FoodDiaryEntryModel> getFoodDiaryEntriesForToday(@PathVariable("email") final String userEmail) throws FitnessException {
+	public List<FoodDiaryEntryModel> getFoodDiaryEntriesForToday(@PathVariable("email") final String userEmail) 
+			throws FitnessException {
 		final User user = userService.getUser(userEmail);
 		return foodDiaryEntryModelAssembler.toCollectionModel(foodDiaryService.getFoodDiaryEntriesForToday(user));
 	}

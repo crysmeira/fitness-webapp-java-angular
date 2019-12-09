@@ -7,7 +7,7 @@ import com.fitnesswebapp.domain.model.fitness.FoodDiaryEntry;
 import com.fitnesswebapp.domain.model.fitness.User;
 
 /**
- * Interface for service to operate on food diary objects.
+ * Interface for service to operate on food diary entry objects.
  *
  * @author Crystiane Meira
  */
@@ -18,17 +18,18 @@ public interface FoodDiaryEntryService {
 	 *
 	 * @param foodDiaryEntries The food diary entries containing information for food consumed in the current day.
 	 * @param user The user logged in.
-	 * @return The FoodDiary saved using the given food diary entries.
-	 * @throws FitnessException If foodDiaryEntries is null or empty, if there is already a food diary saved for the same day or if user is null.
+	 * @return A list containing the food diary entries saved.
+	 * @throws FitnessException If {@code foodDiaryEntries} is null or empty, if there is already a food diary saved for the same day 
+	 * or if {@code user} is null.
 	 */
 	public List<FoodDiaryEntry> saveFoodDiaryEntries(List<FoodDiaryEntry> foodDiaryEntries, User user) throws FitnessException;
 
 	/**
-	 * Gets the food diary for the current day.
+	 * Gets the food diary entries for the current day.
 	 *
 	 * @param user The user logged in.
-	 * @return The FoodDiary or null if there is no food diary for the current day.
-	 * @throws FitnessException If user is null.
+	 * @return A list containing the food diary entries for the current day or null if there is no food diary entry.
+	 * @throws FitnessException If {@code user} is null.
 	 */
 	public List<FoodDiaryEntry> getFoodDiaryEntriesForToday(User user) throws FitnessException;
 

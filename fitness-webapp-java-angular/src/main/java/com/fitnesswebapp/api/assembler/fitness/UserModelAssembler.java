@@ -6,8 +6,9 @@ import org.springframework.stereotype.Component;
 
 import com.fitnesswebapp.api.model.fitness.UserModel;
 import com.fitnesswebapp.domain.model.fitness.User;
+import com.fitnesswebapp.utils.BeanNames;
 
-@Component
+@Component(BeanNames.USER_MODEL_ASSEMBLER)
 public class UserModelAssembler {
 
 	@Autowired
