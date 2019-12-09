@@ -37,13 +37,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User saveUser(final User user) throws FitnessException {
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_400005);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400005);
 		}
 		if (StringUtils.isEmpty(user.getEmail())) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_400004);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400004);
 		}
 		if (userRepository.findUserByEmail(user.getEmail()) != null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500010, 
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500010, 
 					                   new String[] {user.getEmail()});
 		}
 
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUser(final String email) throws FitnessException {
 		if (StringUtils.isBlank(email)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_400006);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400006);
 		}
 
 		return userRepository.findUserByEmail(email);
@@ -71,15 +71,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User updateUser(final User user) throws FitnessException {
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_400007);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400007);
 		}
 		if (StringUtils.isBlank(user.getEmail())) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_400008);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400008);
 		}
 
 		final User retrievedUser = userRepository.findUserByEmail(user.getEmail());
 		if (retrievedUser == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500021);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500021);
 		}
 
 		// FIXME: modify it
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteUser(final String email) throws FitnessException {
 		if (StringUtils.isBlank(email)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500011);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500011);
 		}
 
 		final User user = userRepository.findUserByEmail(email);

@@ -41,13 +41,13 @@ public class NutritionixServiceImpl implements NutritionixService {
 	@Override
 	public List<Food> searchFood(final String query) throws FitnessException {
 		if (StringUtils.isBlank(query)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_400009);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400009);
 		}
 
 		try {
 			return nutritionixRepository.searchFood(query);
 		} catch (JSONException | IOException e) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500001, 
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500001, 
 					                   new String[] {query}, e);
 		}
 	}
@@ -58,13 +58,13 @@ public class NutritionixServiceImpl implements NutritionixService {
 	@Override
 	public Nutrient getNutrient(final String foodId) throws FitnessException {
 		if (StringUtils.isBlank(foodId)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_400010);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400010);
 		}
 
 		try {
 			return nutritionixRepository.getNutrient(foodId);
 		} catch (IOException | JSONException e) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500002, 
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500002, 
 					                   new String[] {foodId}, e);
 		}
 	}
@@ -76,19 +76,19 @@ public class NutritionixServiceImpl implements NutritionixService {
 	public Exercise getExercise(final String exercise, final int durationInMinutes, final String email) 
 			                    throws FitnessException {
 		if (StringUtils.isBlank(exercise)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_400011);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400011);
 		}
 		if (durationInMinutes < 0) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_400012);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400012);
 		}
 		if (StringUtils.isBlank(email)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_400013);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400013);
 		}
 
 		try {
 			return nutritionixRepository.getExercise(exercise, durationInMinutes, email);
 		} catch (IOException | JSONException e) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500003, 
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500003, 
 					                   new String[] {exercise, String.valueOf(durationInMinutes)}, e);
 		}
 	}

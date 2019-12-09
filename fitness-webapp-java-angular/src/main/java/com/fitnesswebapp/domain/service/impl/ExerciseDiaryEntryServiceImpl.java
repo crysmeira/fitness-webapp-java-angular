@@ -41,10 +41,10 @@ public class ExerciseDiaryEntryServiceImpl implements ExerciseDiaryEntryService 
 	public ExerciseDiaryEntry saveExerciseDiaryEntry(final ExerciseDiaryEntry exerciseDiaryEntry, final User user) 
 			throws FitnessException {
 		if (exerciseDiaryEntry == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500006);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500006);
 		}
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500014);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500014);
 		}
 
 		exerciseDiaryEntry.setDate(LocalDate.now());//.minusDays(new Random().nextInt(1000)));
@@ -58,7 +58,7 @@ public class ExerciseDiaryEntryServiceImpl implements ExerciseDiaryEntryService 
 	@Override
 	public List<ExerciseDiaryEntry> getExerciseDiaryForToday(final User user) throws FitnessException {
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500015);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500015);
 		}
 
 		final LocalDate today = LocalDate.now();

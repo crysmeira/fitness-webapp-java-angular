@@ -43,16 +43,16 @@ public class FoodDiaryEntryServiceImpl implements FoodDiaryEntryService {
 	@Override
 	public List<FoodDiaryEntry> saveFoodDiaryEntries(final List<FoodDiaryEntry> foodDiaryEntries, final User user) throws FitnessException {
 		if (foodDiaryEntries == null || foodDiaryEntries.isEmpty()) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500007);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500007);
 		}
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500016);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500016);
 		}
 
 		LocalDate today = LocalDate.now();
 		today = LocalDate.now();//.minusDays(new Random().nextInt(1000));
 		if (isThereFoodDiaryForToday(user.getUserId(), today)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500008, new String[] {today.toString()});
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500008, new String[] {today.toString()});
 		}
 
 		return foodDiaryEntries.stream()
@@ -70,7 +70,7 @@ public class FoodDiaryEntryServiceImpl implements FoodDiaryEntryService {
 	@Override
 	public List<FoodDiaryEntry> getFoodDiaryEntriesForToday(final User user) throws FitnessException {
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500017);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500017);
 		}
 
 		final LocalDate today = LocalDate.now();

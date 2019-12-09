@@ -1,15 +1,18 @@
 package com.fitnesswebapp.domain.exception;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.fitnesswebapp.utils.BeanNames;
 
@@ -19,9 +22,7 @@ import com.fitnesswebapp.utils.BeanNames;
  * @author Crystiane Meira
  */
 @ControllerAdvice
-public class GlobalControllerExceptionHandler {
-
-	private static final Logger logger = LogManager.getLogger(GlobalControllerExceptionHandler.class);
+public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
 	private final MessageLoader messageLoader;
 
@@ -37,11 +38,38 @@ public class GlobalControllerExceptionHandler {
 	 * @return An {@link ExceptionDetails} object containing details for the given exception.
 	 */
 	@ExceptionHandler(FitnessException.class)
-	public ResponseEntity<ExceptionDetails> handleFitnessException(final FitnessException fitnessException) {
-		final ExceptionDetails exceptionDetails = new ExceptionDetails(new Date(), fitnessException.getHttpStatusCode(), HttpStatus.valueOf(fitnessException.getHttpStatusCode()).getReasonPhrase(),
-				messageLoader.getLocalizedErrorMessage(fitnessException.getErrorCode(), fitnessException.getErrorArguments()));
+	public ResponseEntity<?> handleFitnessException(final FitnessException ex, WebRequest request) {
+		ExceptionType exceptionType = ExceptionType.RESOURCE_NOT_FOUND;
+		HttpStatus status = ex.getHttpStatus();
+		
+		final ExceptionDetails exceptionDetails = ExceptionDetails.builder().timestamp(LocalDateTime.now())
+																	.status(status.value())
+																	.type(exceptionType.getUri())
+																	.title(exceptionType.getTitle())
+																	.detail(messageLoader.getLocalizedErrorMessage(ex.getErrorCode(), ex.getErrorArguments()))
+																	.userMessage(messageLoader.getLocalizedErrorMessage(ex.getErrorCode(), ex.getErrorArguments()))
+																	.fields(new ArrayList<>())
+																	.build();
 
-		logger.debug("Exception details: {}.", exceptionDetails);
-		return new ResponseEntity<>(exceptionDetails, HttpStatus.valueOf(fitnessException.getHttpStatusCode()));
+		return handleExceptionInternal(ex, exceptionDetails, new HttpHeaders(), status, request);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		if (body == null) {
+			body = ExceptionDetails.builder().timestamp(LocalDateTime.now())
+									.status(status.value())
+									.title(status.getReasonPhrase())
+									.userMessage("TO BE DEFINED")
+									.build();
+		} else if (body instanceof String) {
+			body = ExceptionDetails.builder().timestamp(LocalDateTime.now())
+									.status(status.value())
+									.title((String) body)
+									.userMessage("TO BE DEFINED")
+									.build();
+		}
+		
+		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
 }

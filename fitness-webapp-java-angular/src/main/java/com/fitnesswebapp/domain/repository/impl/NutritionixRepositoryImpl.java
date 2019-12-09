@@ -64,7 +64,7 @@ public class NutritionixRepositoryImpl implements NutritionixRepository {
 			httpUrlConnection = nutritionixConfig.getConnectionQuery(query);
 
 			if (httpUrlConnection.getResponseCode() != HttpStatus.OK.value()) {
-				throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500009, 
+				throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500009, 
 										   new String[] {String.valueOf(httpUrlConnection.getResponseCode())});
 			}
 
@@ -106,7 +106,7 @@ public class NutritionixRepositoryImpl implements NutritionixRepository {
 			httpUrlConnection = nutritionixConfig.getConnectionNutrients(foodId);
 
 			if (httpUrlConnection.getResponseCode() != HttpStatus.OK.value()) {
-				throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500009, 
+				throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500009, 
 										   new String[] {String.valueOf(httpUrlConnection.getResponseCode())});
 			}
 
@@ -145,7 +145,7 @@ public class NutritionixRepositoryImpl implements NutritionixRepository {
 			                    throws IOException, JSONException, FitnessException {
 		final User user = userRepository.findUserByEmail(email);
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500022);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500022);
 		}
 
 		final int userAge = UserHelper.getUserAge(user.getBirthDate());
@@ -185,7 +185,7 @@ public class NutritionixRepositoryImpl implements NutritionixRepository {
 			httpUrlConnection = nutritionixConfig.getConnectionExercises(postRequestBody.toString());
 
 			if (httpUrlConnection.getResponseCode() != HttpStatus.OK.value()) {
-				throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500009, 
+				throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500009, 
 										   new String[] {String.valueOf(httpUrlConnection.getResponseCode())});
 			}
 

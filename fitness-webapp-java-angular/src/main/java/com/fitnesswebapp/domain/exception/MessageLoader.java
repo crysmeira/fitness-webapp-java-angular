@@ -42,6 +42,6 @@ public class MessageLoader {
 	 * @return The error message
 	 */
 	public String getLocalizedErrorMessage(final String messageKey, final String[] arguments) {
-		return errorMessageSource.getMessage(messageKey, arguments, "A default message.", Locale.US);
+		return errorMessageSource.getMessage(messageKey, arguments, "An unexpected error ocurred.", Locale.US);
 	}
 }

@@ -49,10 +49,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 	@Override
 	public StatisticsModel getStatistics(final User user, final int numDays) throws FitnessException {
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500018);
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500018);
 		}
 		if (numDays < 0) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorCodes.ERROR_500019, 
+			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500019, 
 									   new String[] {String.valueOf(numDays)});
 		}
 
