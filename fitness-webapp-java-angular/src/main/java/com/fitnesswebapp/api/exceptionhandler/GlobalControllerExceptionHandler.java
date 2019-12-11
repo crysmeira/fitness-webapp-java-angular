@@ -1,8 +1,6 @@
-package com.fitnesswebapp.domain.exception;
+package com.fitnesswebapp.api.exceptionhandler;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.fitnesswebapp.domain.exception.FitnessException;
 import com.fitnesswebapp.utils.BeanNames;
 
 /**
@@ -48,7 +47,6 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 																	.title(exceptionType.getTitle())
 																	.detail(messageLoader.getLocalizedErrorMessage(ex.getErrorCode(), ex.getErrorArguments()))
 																	.userMessage(messageLoader.getLocalizedErrorMessage(ex.getErrorCode(), ex.getErrorArguments()))
-																	.fields(new ArrayList<>())
 																	.build();
 
 		return handleExceptionInternal(ex, exceptionDetails, new HttpHeaders(), status, request);

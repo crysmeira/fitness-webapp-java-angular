@@ -1,17 +1,18 @@
 package com.fitnesswebapp.domain.exception;
 
-import java.util.Arrays;
-
 import org.springframework.http.HttpStatus;
 
+import lombok.Getter;
+
 /**
- * Custom checked exception used in this application.
+ * Custom general unchecked exception used in this application.
  *
  * @author Crystiane Meira
  */
-public class FitnessException extends Exception {
+@Getter
+public class FitnessException extends RuntimeException {
 
-	private static final long serialVersionUID = 2434486210831052605L;
+	private static final long serialVersionUID = 7279720268718982299L;
 
 	private final HttpStatus httpStatus;
 	private final String errorCode;
@@ -63,31 +64,6 @@ public class FitnessException extends Exception {
 		this.httpStatus = httpStatus;
 		this.errorCode = errorCode;
 		this.errorArguments = errorArguments;
-	}
-
-	public HttpStatus getHttpStatus() {
-		return httpStatus;
-	}
-
-	public String getErrorCode() {
-		return errorCode;
-	}
-
-	public String[] getErrorArguments() {
-		return errorArguments;
-	}
-
-	@Override
-	public String toString() {
-		final StringBuilder builder = new StringBuilder();
-		builder.append("FitnessException [httpStatus=");
-		builder.append(httpStatus);
-		builder.append(", errorCode=");
-		builder.append(errorCode);
-		builder.append(", errorArguments=");
-		builder.append(Arrays.toString(errorArguments));
-		builder.append("]");
-		return builder.toString();
 	}
 
 }

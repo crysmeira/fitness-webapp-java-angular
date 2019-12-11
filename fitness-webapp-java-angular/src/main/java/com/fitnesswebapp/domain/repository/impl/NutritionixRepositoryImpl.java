@@ -19,7 +19,8 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fitnesswebapp.core.config.NutritionixConfig;
-import com.fitnesswebapp.domain.exception.FitnessException;
+import com.fitnesswebapp.domain.exception.NutritionixApiCallException;
+import com.fitnesswebapp.domain.exception.UserNotFoundException;
 import com.fitnesswebapp.domain.model.fitness.User;
 import com.fitnesswebapp.domain.model.nutritionix.Exercise;
 import com.fitnesswebapp.domain.model.nutritionix.Food;
@@ -45,17 +46,17 @@ public class NutritionixRepositoryImpl implements NutritionixRepository {
 	private final UserRepository userRepository;
 
 	@Autowired
-	public NutritionixRepositoryImpl(final UserRepository usersRepository,
+	public NutritionixRepositoryImpl(final UserRepository userRepository,
 			                         @Qualifier(BeanNames.NUTRITIONIX_CONFIG) final NutritionixConfig nutritionixConfig) {
 		this.nutritionixConfig = nutritionixConfig;
-		userRepository = usersRepository;
+		this.userRepository = userRepository;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<Food> searchFood(final String query) throws IOException, JSONException, FitnessException {
+	public List<Food> searchFood(final String query) throws IOException, JSONException {
 		HttpURLConnection httpUrlConnection = null;
 		BufferedReader bufferedReader = null;
 		final StringBuilder content = new StringBuilder();
@@ -64,7 +65,7 @@ public class NutritionixRepositoryImpl implements NutritionixRepository {
 			httpUrlConnection = nutritionixConfig.getConnectionQuery(query);
 
 			if (httpUrlConnection.getResponseCode() != HttpStatus.OK.value()) {
-				throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500009, 
+				throw new NutritionixApiCallException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500009, 
 										   new String[] {String.valueOf(httpUrlConnection.getResponseCode())});
 			}
 
@@ -89,7 +90,7 @@ public class NutritionixRepositoryImpl implements NutritionixRepository {
 
 		final ObjectMapper mapper = new ObjectMapper();
 		final String jsonData = requestJSON.toString();
-		final Food[] foodArray = mapper.readValue(jsonData , Food[].class);
+		final Food[] foodArray = mapper.readValue(jsonData, Food[].class);
 		return Arrays.asList(foodArray);
 	}
 
@@ -97,7 +98,7 @@ public class NutritionixRepositoryImpl implements NutritionixRepository {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Nutrient getNutrient(final String foodId) throws IOException, JSONException, FitnessException {
+	public Nutrient getNutrient(final String foodId) throws IOException, JSONException {
 		HttpURLConnection httpUrlConnection = null;
 		BufferedReader bufferedReader = null;
 		final StringBuilder content = new StringBuilder();
@@ -106,7 +107,7 @@ public class NutritionixRepositoryImpl implements NutritionixRepository {
 			httpUrlConnection = nutritionixConfig.getConnectionNutrients(foodId);
 
 			if (httpUrlConnection.getResponseCode() != HttpStatus.OK.value()) {
-				throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500009, 
+				throw new NutritionixApiCallException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500009, 
 										   new String[] {String.valueOf(httpUrlConnection.getResponseCode())});
 			}
 
@@ -142,10 +143,10 @@ public class NutritionixRepositoryImpl implements NutritionixRepository {
 	 */
 	@Override
 	public Exercise getExercise(final String exercise, final int durationInMinutes, final String email) 
-			                    throws IOException, JSONException, FitnessException {
+			                    throws IOException, JSONException {
 		final User user = userRepository.findUserByEmail(email);
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500022);
+			throw new UserNotFoundException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500022);
 		}
 
 		final int userAge = UserHelper.getUserAge(user.getBirthDate());
@@ -185,7 +186,7 @@ public class NutritionixRepositoryImpl implements NutritionixRepository {
 			httpUrlConnection = nutritionixConfig.getConnectionExercises(postRequestBody.toString());
 
 			if (httpUrlConnection.getResponseCode() != HttpStatus.OK.value()) {
-				throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500009, 
+				throw new NutritionixApiCallException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500009, 
 										   new String[] {String.valueOf(httpUrlConnection.getResponseCode())});
 			}
 

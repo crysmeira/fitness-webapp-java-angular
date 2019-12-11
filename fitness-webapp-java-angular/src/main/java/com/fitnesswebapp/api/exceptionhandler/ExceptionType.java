@@ -1,4 +1,4 @@
-package com.fitnesswebapp.domain.exception;
+package com.fitnesswebapp.api.exceptionhandler;
 
 import lombok.Getter;
 
