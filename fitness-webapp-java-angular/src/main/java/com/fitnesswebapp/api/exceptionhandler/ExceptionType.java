@@ -10,13 +10,13 @@ import lombok.Getter;
 @Getter
 public enum ExceptionType {
 
-	INCOMPREHENSIBLE_MESSAGE("Incomprehensible message", "/incomprehensible-message"),
 	RESOURCE_NOT_FOUND("Resource not found", "/resource-not-found"),
-	ENTITY_IN_USE("Entity in use", "/entity-in-use"),
+	ALREADY_EXISTENT_RESOURCE("Already existent resource", "/already-existent-resource"),
 	GENERAL_EXCEPTION("General exception", "/general-exception"),
 	SYSTEM_ERROR("System error", "/system-error"),
-	INVALID_PARAMETER("Invalid parameter", "/invalid-parameter"),
-	INVALID_DATA("Invalid data", "/invalid-data");
+	INCOMPREHENSIBLE_MESSAGE("Incomprehensible message", "/incomprehensible-message"),
+	INVALID_METHOD("Invalid method", "/invalid-method"),
+	INVALID_PARAMETER("Invalid parameter", "/invalid-parameter");
 
 	private String title;
 	private String uri;

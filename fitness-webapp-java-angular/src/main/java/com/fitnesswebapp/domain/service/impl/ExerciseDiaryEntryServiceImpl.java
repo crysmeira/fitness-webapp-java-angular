@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.fitnesswebapp.domain.exception.FitnessException;
+import com.fitnesswebapp.domain.exception.InvalidInputException;
+import com.fitnesswebapp.domain.exception.UserNotFoundException;
 import com.fitnesswebapp.domain.model.fitness.ExerciseDiaryEntry;
 import com.fitnesswebapp.domain.model.fitness.User;
 import com.fitnesswebapp.domain.repository.ExerciseDiaryEntryRepository;
@@ -38,16 +39,15 @@ public class ExerciseDiaryEntryServiceImpl implements ExerciseDiaryEntryService 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ExerciseDiaryEntry saveExerciseDiaryEntry(final ExerciseDiaryEntry exerciseDiaryEntry, final User user) 
-			throws FitnessException {
+	public ExerciseDiaryEntry saveExerciseDiaryEntry(final ExerciseDiaryEntry exerciseDiaryEntry, final User user) {
 		if (exerciseDiaryEntry == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500006);
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400014);
 		}
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500014);
+			throw new UserNotFoundException(HttpStatus.NOT_FOUND, ErrorCodes.ERROR_404003);
 		}
 
-		exerciseDiaryEntry.setDate(LocalDate.now());//.minusDays(new Random().nextInt(1000)));
+		exerciseDiaryEntry.setDate(LocalDate.now()); //.minusDays(new Random().nextInt(1000)));
 		exerciseDiaryEntry.setUser(user);
 		return exerciseDiaryEntryRepository.save(exerciseDiaryEntry);
 	}
@@ -56,9 +56,9 @@ public class ExerciseDiaryEntryServiceImpl implements ExerciseDiaryEntryService 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ExerciseDiaryEntry> getExerciseDiaryForToday(final User user) throws FitnessException {
+	public List<ExerciseDiaryEntry> getExerciseDiaryForToday(final User user) {
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500015);
+			throw new UserNotFoundException(HttpStatus.NOT_FOUND, ErrorCodes.ERROR_404004);
 		}
 
 		final LocalDate today = LocalDate.now();

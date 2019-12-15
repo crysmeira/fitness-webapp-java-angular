@@ -20,5 +20,6 @@ public class UserInput {
 	private final LocalDate birthDate;
 	private final Double weight;
 	private final Integer height;
+	private final Boolean enabled;
 
 }

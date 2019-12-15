@@ -1,10 +1,20 @@
 package com.fitnesswebapp.api.controller;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,11 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fitnesswebapp.api.assembler.fitness.UserInputDisassembler;
 import com.fitnesswebapp.api.assembler.fitness.UserModelAssembler;
 import com.fitnesswebapp.api.model.fitness.UserModel;
 import com.fitnesswebapp.api.model.fitness.input.UserInput;
-import com.fitnesswebapp.domain.exception.FitnessException;
 import com.fitnesswebapp.domain.model.fitness.User;
 import com.fitnesswebapp.domain.service.UserService;
 import com.fitnesswebapp.utils.BeanNames;
@@ -49,12 +60,10 @@ public class UserController {
 	 *
 	 * @param userInput The user to be saved.
 	 * @return The user saved.
-	 * @throws FitnessException If user is null or empty or if there is already a user saved with the same 
-	 * email address.
 	 */
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public UserModel registerUser(@RequestBody final UserInput userInput) throws FitnessException {
+	public UserModel registerUser(@RequestBody final UserInput userInput) {
 		User user = userInputDisassembler.toDomainObject(userInput);
 		user = userService.saveUser(user);
 		return userModelAssembler.toModel(user);
@@ -65,10 +74,9 @@ public class UserController {
 	 *
 	 * @param email The email address.
 	 * @return The user that matches the given email address.
-	 * @throws FitnessException If email is null or empty.
 	 */
 	@GetMapping(value = "/{email}")
-	public UserModel getUserByEmail(@PathVariable("email") final String email) throws FitnessException {
+	public UserModel getUserByEmail(@PathVariable("email") final String email) {
 		User user = userService.getUser(email);
 		return userModelAssembler.toModel(user);
 	}
@@ -78,12 +86,11 @@ public class UserController {
 	 *
 	 * @param user The user to be updated.
 	 * @return The user updated.
-	 * @throws FitnessException If user is null or empty.
 	 */
-	@PutMapping
-	public UserModel updateUser(@RequestBody final UserInput userInput) throws FitnessException {
+	@PutMapping("/{email}")
+	public UserModel updateUser(@PathVariable String email, @RequestBody final UserInput userInput) {
 		User user = userInputDisassembler.toDomainObject(userInput);
-		user = userService.updateUser(user);
+		user = userService.updateUser(email, user);
 		return userModelAssembler.toModel(user);
 	}
 
@@ -92,11 +99,44 @@ public class UserController {
 	 *
 	 * @param email The email address.
 	 * @return The user that matches the given email address.
-	 * @throws FitnessException If email is null or empty.
 	 */
 	@DeleteMapping(value = "/{email}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteUser(@PathVariable("email") final String email) throws FitnessException {
+	public void deleteUser(@PathVariable("email") final String email) {
 		userService.deleteUser(email);
+	}
+	
+	@PatchMapping("/{email}")
+	public UserModel partialUpdate(@PathVariable String email, @RequestBody Map<String, Object> fields, HttpServletRequest request) {
+		User user = userService.getUser(email);
+		
+		merge(fields, user, request);
+		User updatedUser = userService.updateUser(email, user);
+		
+		return userModelAssembler.toModel(updatedUser);
+	}
+	
+	private void merge(Map<String, Object> sourceData, User targetUser, HttpServletRequest request) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+	
+			User sourceUser = objectMapper.convertValue(sourceData, User.class);
+			
+			sourceData.forEach((propertyName, propertyValue) -> {
+				Field field = ReflectionUtils.findField(User.class, propertyName);
+				field.setAccessible(true);
+				
+				Object newValue = ReflectionUtils.getField(field, sourceUser);
+				
+				ReflectionUtils.setField(field, targetUser, newValue);
+			});
+		} catch (IllegalArgumentException e) {
+			ServletServerHttpRequest serverHttpRequset = new ServletServerHttpRequest(request);
+			
+			Throwable rootCause = ExceptionUtils.getRootCause(e);
+			throw new HttpMessageNotReadableException(e.getMessage(), rootCause, serverHttpRequset);
+		}
 	}
 }

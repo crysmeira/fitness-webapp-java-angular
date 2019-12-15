@@ -23,7 +23,24 @@ public class ErrorCodes {
 	public static final String ERROR_400013 = "ERROR_400013";
 	public static final String ERROR_400014 = "ERROR_400014";
 	public static final String ERROR_400015 = "ERROR_400015";
+	public static final String ERROR_400016 = "ERROR_400016";
+	public static final String ERROR_400017 = "ERROR_400017";
+	public static final String ERROR_400018 = "ERROR_400018";
+	public static final String ERROR_400019 = "ERROR_400019";
+	public static final String ERROR_400020 = "ERROR_400020";
+	
+	public static final String ERROR_404001 = "ERROR_404001";
+	public static final String ERROR_404002 = "ERROR_404002";
+	public static final String ERROR_404003 = "ERROR_404003";
+	public static final String ERROR_404004 = "ERROR_404004";
+	public static final String ERROR_404005 = "ERROR_404005";
+	public static final String ERROR_404006 = "ERROR_404006";
+	public static final String ERROR_404007 = "ERROR_404007";
+	public static final String ERROR_404008 = "ERROR_404008";
 
+	public static final String ERROR_409001 = "ERROR_409001";
+	public static final String ERROR_409002 = "ERROR_409002";
+	
 	// Server error codes
 	public static final String ERROR_500001 = "ERROR_500001";
 	public static final String ERROR_500002 = "ERROR_500002";

@@ -12,7 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.fitnesswebapp.api.model.fitness.StatisticsModel;
-import com.fitnesswebapp.domain.exception.FitnessException;
+import com.fitnesswebapp.domain.exception.InvalidInputException;
+import com.fitnesswebapp.domain.exception.UserNotFoundException;
 import com.fitnesswebapp.domain.model.fitness.ExerciseDiaryEntry;
 import com.fitnesswebapp.domain.model.fitness.FoodDiaryEntry;
 import com.fitnesswebapp.domain.model.fitness.User;
@@ -47,12 +48,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public StatisticsModel getStatistics(final User user, final int numDays) throws FitnessException {
+	public StatisticsModel getStatistics(final User user, final int numDays) {
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500018);
+			throw new UserNotFoundException(HttpStatus.NOT_FOUND, ErrorCodes.ERROR_404006);
 		}
 		if (numDays < 0) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500019, 
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400017, 
 									   new String[] {String.valueOf(numDays)});
 		}
 
@@ -67,7 +68,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 		final Map<LocalDate, Map<String, Double>> foodData = new HashMap<>();
 
-		foodDiaryEntries.stream().forEach(entry -> {
+		foodDiaryEntries.forEach(entry -> {
 			final Map<String, Double> nutritionData = new HashMap<>();
 
 			nutritionData.put(FitnessConstants.STATISTICS_CALORIES, 
@@ -85,14 +86,14 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 		final Map<LocalDate, Map<String, Long>> exerciseData = new HashMap<>();
 
-		exerciseDiaries.stream().forEach(exerciseDiary -> {
+		exerciseDiaries.forEach(exerciseDiary -> {
 			final Map<String, Long> nutritionData = exerciseData.getOrDefault(exerciseDiary.getDate(), new HashMap<>());
 
 			nutritionData.put(FitnessConstants.STATISTICS_CALORIES, 
-					          nutritionData.getOrDefault(FitnessConstants.STATISTICS_CALORIES, 0l) 
+					          nutritionData.getOrDefault(FitnessConstants.STATISTICS_CALORIES, 0L) 
 					          + exerciseDiary.getCalories());
 			nutritionData.put(FitnessConstants.STATISTICS_DURATION, 
-					          nutritionData.getOrDefault(FitnessConstants.STATISTICS_DURATION, 0l) 
+					          nutritionData.getOrDefault(FitnessConstants.STATISTICS_DURATION, 0L) 
 					          + exerciseDiary.getDuration());
 
 			exerciseData.put(exerciseDiary.getDate(), nutritionData);

@@ -1,9 +1,6 @@
 spring:
   profiles:
     include: secrets
-  messages:
-    basename: classpath:messages/error-messages
-    cache-duration: 30000
   jpa:
     hibernate:
       ddl-auto: update
@@ -11,3 +8,11 @@ spring:
   queries:
     users-query: select email, password, enabled from user where email=?
     roles-query: select u.email, r.role from user u inner join user_roles ur on (u.user_id=ur.user_id) inner join user_role r on (ur.role_id=r.role_id) where u.email=?
+  jackson:
+    deserialization:
+      fail-on-ignored-properties: true
+      fail-on-unknown-properties: true 
+  mvc:
+      throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false

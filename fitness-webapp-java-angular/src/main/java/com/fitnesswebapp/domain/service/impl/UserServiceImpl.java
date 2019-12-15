@@ -3,11 +3,14 @@ package com.fitnesswebapp.domain.service.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import com.fitnesswebapp.domain.exception.FitnessException;
+import com.fitnesswebapp.domain.exception.InvalidInputException;
+import com.fitnesswebapp.domain.exception.UserAlreadyExistsException;
+import com.fitnesswebapp.domain.exception.UserNotFoundException;
 import com.fitnesswebapp.domain.model.fitness.User;
 import com.fitnesswebapp.domain.repository.UserRepository;
 import com.fitnesswebapp.domain.service.UserService;
@@ -35,15 +38,15 @@ public class UserServiceImpl implements UserService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public User saveUser(final User user) throws FitnessException {
+	public User saveUser(final User user) {
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400005);
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400005);
 		}
-		if (StringUtils.isEmpty(user.getEmail())) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400004);
+		if (StringUtils.isBlank(user.getEmail())) {
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400004);
 		}
 		if (userRepository.findUserByEmail(user.getEmail()) != null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500010, 
+			throw new UserAlreadyExistsException(HttpStatus.CONFLICT, ErrorCodes.ERROR_409002, 
 					                   new String[] {user.getEmail()});
 		}
 
@@ -57,9 +60,9 @@ public class UserServiceImpl implements UserService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public User getUser(final String email) throws FitnessException {
+	public User getUser(final String email) {
 		if (StringUtils.isBlank(email)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400006);
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400006);
 		}
 
 		return userRepository.findUserByEmail(email);
@@ -69,42 +72,38 @@ public class UserServiceImpl implements UserService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public User updateUser(final User user) throws FitnessException {
+	public User updateUser(String userEmail, final User user) {
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400007);
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400007);
 		}
-		if (StringUtils.isBlank(user.getEmail())) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400008);
+		if (StringUtils.isBlank(userEmail)) {
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400008);
 		}
 
-		final User retrievedUser = userRepository.findUserByEmail(user.getEmail());
+		final User retrievedUser = userRepository.findUserByEmail(userEmail);
 		if (retrievedUser == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500021);
+			throw new UserNotFoundException(HttpStatus.NOT_FOUND, ErrorCodes.ERROR_404007);
 		}
-
-		// FIXME: modify it
-		retrievedUser.setBirthDate(user.getBirthDate());
-		retrievedUser.setFirstName(user.getFirstName());
-		retrievedUser.setLastName(user.getLastName());
-		retrievedUser.setHeight(user.getHeight());
-		retrievedUser.setWeight(user.getWeight());
+		
+		BeanUtils.copyProperties(user, retrievedUser, "userId", "email");
 
 		return userRepository.save(retrievedUser);
 	}
 
 	/**
-	 * Deletes an {@link User} based on the given email address.
-	 *
-	 * @param email The email address.
-	 * @throws FitnessException If email is null or empty.
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void deleteUser(final String email) throws FitnessException {
+	public void deleteUser(final String email) {
 		if (StringUtils.isBlank(email)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500011);
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400019);
 		}
 
 		final User user = userRepository.findUserByEmail(email);
+		if (user == null) {
+			throw new UserNotFoundException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400020);
+		}
+		
 		userRepository.delete(user);
 
 		logger.debug("Deleted user for email '{}'.", email);

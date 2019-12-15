@@ -146,7 +146,7 @@ public class NutritionixRepositoryImpl implements NutritionixRepository {
 			                    throws IOException, JSONException {
 		final User user = userRepository.findUserByEmail(email);
 		if (user == null) {
-			throw new UserNotFoundException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500022);
+			throw new UserNotFoundException(HttpStatus.NOT_FOUND, ErrorCodes.ERROR_404005);
 		}
 
 		final int userAge = UserHelper.getUserAge(user.getBirthDate());

@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.fitnesswebapp.domain.exception.FitnessException;
+import com.fitnesswebapp.domain.exception.FoodDiaryEntryAlreadyExistsException;
+import com.fitnesswebapp.domain.exception.InvalidInputException;
+import com.fitnesswebapp.domain.exception.UserNotFoundException;
 import com.fitnesswebapp.domain.model.fitness.FoodDiaryEntry;
 import com.fitnesswebapp.domain.model.fitness.User;
 import com.fitnesswebapp.domain.repository.FoodDiaryEntryRepository;
@@ -41,18 +43,18 @@ public class FoodDiaryEntryServiceImpl implements FoodDiaryEntryService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<FoodDiaryEntry> saveFoodDiaryEntries(final List<FoodDiaryEntry> foodDiaryEntries, final User user) throws FitnessException {
+	public List<FoodDiaryEntry> saveFoodDiaryEntries(final List<FoodDiaryEntry> foodDiaryEntries, final User user) {
 		if (foodDiaryEntries == null || foodDiaryEntries.isEmpty()) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500007);
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_404002);
 		}
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500016);
+			throw new UserNotFoundException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500016);
 		}
 
 		LocalDate today = LocalDate.now();
-		today = LocalDate.now();//.minusDays(new Random().nextInt(1000));
+		today = LocalDate.now(); //.minusDays(new Random().nextInt(1000));
 		if (isThereFoodDiaryForToday(user.getUserId(), today)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500008, new String[] {today.toString()});
+			throw new FoodDiaryEntryAlreadyExistsException(HttpStatus.CONFLICT, ErrorCodes.ERROR_409001, new String[] {today.toString()});
 		}
 
 		return foodDiaryEntries.stream()
@@ -68,9 +70,9 @@ public class FoodDiaryEntryServiceImpl implements FoodDiaryEntryService {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<FoodDiaryEntry> getFoodDiaryEntriesForToday(final User user) throws FitnessException {
+	public List<FoodDiaryEntry> getFoodDiaryEntriesForToday(final User user) {
 		if (user == null) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_500017);
+			throw new UserNotFoundException(HttpStatus.NOT_FOUND, ErrorCodes.ERROR_404001);
 		}
 
 		final LocalDate today = LocalDate.now();

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.fitnesswebapp.domain.exception.FitnessException;
+import com.fitnesswebapp.domain.exception.InvalidInputException;
 import com.fitnesswebapp.domain.model.nutritionix.Exercise;
 import com.fitnesswebapp.domain.model.nutritionix.Food;
 import com.fitnesswebapp.domain.model.nutritionix.Nutrient;
@@ -41,7 +42,7 @@ public class NutritionixServiceImpl implements NutritionixService {
 	@Override
 	public List<Food> searchFood(final String query) throws FitnessException {
 		if (StringUtils.isBlank(query)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400009);
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400009);
 		}
 
 		try {
@@ -58,7 +59,7 @@ public class NutritionixServiceImpl implements NutritionixService {
 	@Override
 	public Nutrient getNutrient(final String foodId) throws FitnessException {
 		if (StringUtils.isBlank(foodId)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400010);
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400010);
 		}
 
 		try {
@@ -76,13 +77,13 @@ public class NutritionixServiceImpl implements NutritionixService {
 	public Exercise getExercise(final String exercise, final int durationInMinutes, final String email) 
 			                    throws FitnessException {
 		if (StringUtils.isBlank(exercise)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400011);
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400011);
 		}
 		if (durationInMinutes < 0) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400012);
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400012);
 		}
 		if (StringUtils.isBlank(email)) {
-			throw new FitnessException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCodes.ERROR_400013);
+			throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400013);
 		}
 
 		try {

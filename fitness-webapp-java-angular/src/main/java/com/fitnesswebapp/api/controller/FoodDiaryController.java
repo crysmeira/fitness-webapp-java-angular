@@ -15,7 +15,6 @@ import com.fitnesswebapp.api.assembler.fitness.FoodDiaryEntryInputDisassembler;
 import com.fitnesswebapp.api.assembler.fitness.FoodDiaryEntryModelAssembler;
 import com.fitnesswebapp.api.model.fitness.FoodDiaryEntryModel;
 import com.fitnesswebapp.api.model.fitness.input.FoodDiaryEntryInput;
-import com.fitnesswebapp.domain.exception.FitnessException;
 import com.fitnesswebapp.domain.model.fitness.FoodDiaryEntry;
 import com.fitnesswebapp.domain.model.fitness.User;
 import com.fitnesswebapp.domain.service.FoodDiaryEntryService;
@@ -54,12 +53,10 @@ public class FoodDiaryController {
 	 * @param foodDiaryEntries A list containing the food diary entries to be saved.
 	 * @param userEmail The email address for the user logged in.
 	 * @return A list containing the food diary entries saved.
-	 * @throws FitnessException If {@code foodDiaryEntries} or {@code userEmail} is null or empty, if there is already a food
-	 * diary saved for the same day or if a user is not found for the given email.
 	 */
 	@PostMapping(value = "/{email}")
 	public List<FoodDiaryEntryModel> saveFoodDiaryEntries(@RequestBody final List<FoodDiaryEntryInput> foodDiaryEntriesInput, 
-			@PathVariable("email") final String userEmail) throws FitnessException {
+			@PathVariable("email") final String userEmail) {
 		final User user = userService.getUser(userEmail);
 		List<FoodDiaryEntry> foodDiaryEntries = foodDiaryEntryInputDisassembler.toCollectionDomainObject(foodDiaryEntriesInput);
 		return foodDiaryEntryModelAssembler.toCollectionModel(foodDiaryService.saveFoodDiaryEntries(foodDiaryEntries, user));
@@ -70,12 +67,11 @@ public class FoodDiaryController {
 	 *
 	 * @param userEmail The email address for the user logged in.
 	 * @return A list of food diary entries for the current day. If no food diary is found for the current day, return null.
-	 * @throws FitnessException If {@code userEmail} is null or empty or if a user is not found for the given email.
 	 */
 	@GetMapping(value = "/{email}")
-	public List<FoodDiaryEntryModel> getFoodDiaryEntriesForToday(@PathVariable("email") final String userEmail) 
-			throws FitnessException {
+	public List<FoodDiaryEntryModel> getFoodDiaryEntriesForToday(@PathVariable("email") final String userEmail) {
 		final User user = userService.getUser(userEmail);
 		return foodDiaryEntryModelAssembler.toCollectionModel(foodDiaryService.getFoodDiaryEntriesForToday(user));
 	}
+	
 }
