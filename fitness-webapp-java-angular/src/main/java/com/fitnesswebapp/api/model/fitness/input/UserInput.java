@@ -2,6 +2,8 @@ package com.fitnesswebapp.api.model.fitness.input;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotBlank;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,12 +16,13 @@ import lombok.Data;
 @Builder
 public class UserInput {
 
+	@NotBlank
+	private final String email;
+	
 	private final String firstName;
 	private final String lastName;
-	private final String email;
 	private final LocalDate birthDate;
 	private final Double weight;
 	private final Integer height;
-	private final Boolean enabled;
 
 }

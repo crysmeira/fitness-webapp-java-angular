@@ -2,6 +2,8 @@ package com.fitnesswebapp.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,7 +60,7 @@ public class ExerciseDiaryController {
 	 */
 	@PostMapping(value = "/{email}")
 	public ExerciseDiaryEntryModel saveExerciseDiary(
-			@RequestBody final ExerciseDiaryEntryInput exerciseDiaryEntryInput, 
+			@RequestBody @Valid final ExerciseDiaryEntryInput exerciseDiaryEntryInput, 
 			@PathVariable("email") final String userEmail) {
 		final User user = userService.getUser(userEmail);
 		ExerciseDiaryEntry exerciseDiaryEntry = exerciseDiaryEntryInputDisassembler.toDomainObject(exerciseDiaryEntryInput);

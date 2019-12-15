@@ -2,8 +2,11 @@ package com.fitnesswebapp.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +29,7 @@ import com.fitnesswebapp.utils.BeanNames;
  *
  * @author Crystiane Meira
  */
+@Validated
 @RestController
 @RequestMapping("/food-diaries")
 public class FoodDiaryController {
@@ -55,7 +59,7 @@ public class FoodDiaryController {
 	 * @return A list containing the food diary entries saved.
 	 */
 	@PostMapping(value = "/{email}")
-	public List<FoodDiaryEntryModel> saveFoodDiaryEntries(@RequestBody final List<FoodDiaryEntryInput> foodDiaryEntriesInput, 
+	public List<FoodDiaryEntryModel> saveFoodDiaryEntries(@RequestBody final List<@Valid FoodDiaryEntryInput> foodDiaryEntriesInput, 
 			@PathVariable("email") final String userEmail) {
 		final User user = userService.getUser(userEmail);
 		List<FoodDiaryEntry> foodDiaryEntries = foodDiaryEntryInputDisassembler.toCollectionDomainObject(foodDiaryEntriesInput);

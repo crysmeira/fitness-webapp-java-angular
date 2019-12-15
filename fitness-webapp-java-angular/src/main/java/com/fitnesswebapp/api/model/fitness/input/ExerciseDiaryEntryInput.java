@@ -1,5 +1,8 @@
 package com.fitnesswebapp.api.model.fitness.input;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
+
 import lombok.Data;
 
 /**
@@ -10,8 +13,13 @@ import lombok.Data;
 @Data
 public class ExerciseDiaryEntryInput {
 
+	@NotBlank
 	private String exercise;
-	private int duration;
-	private long calories;
+	
+	@PositiveOrZero
+	private Integer duration;
+	
+	@PositiveOrZero
+	private Long calories;
 
 }

@@ -10,6 +10,7 @@ public class FitnessConstants {
 	private FitnessConstants() {} // avoid instantiation
 
 	public static final String SLASH = "/";
+	public static final String DOT = ".";
 
 	public static final String NUTRITIONIX_BASE_URL = "https://trackapi.nutritionix.com";
 	public static final String NUTRITIONIX_FOOD_QUERY = "v2/search/instant?query=";

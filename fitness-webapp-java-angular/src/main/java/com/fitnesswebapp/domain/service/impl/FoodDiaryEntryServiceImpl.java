@@ -3,6 +3,7 @@ package com.fitnesswebapp.domain.service.impl;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -52,7 +53,7 @@ public class FoodDiaryEntryServiceImpl implements FoodDiaryEntryService {
 		}
 
 		LocalDate today = LocalDate.now();
-		today = LocalDate.now(); //.minusDays(new Random().nextInt(1000));
+		today = LocalDate.now().minusDays(new Random().nextInt(1000));
 		if (isThereFoodDiaryForToday(user.getUserId(), today)) {
 			throw new FoodDiaryEntryAlreadyExistsException(HttpStatus.CONFLICT, ErrorCodes.ERROR_409001, new String[] {today.toString()});
 		}

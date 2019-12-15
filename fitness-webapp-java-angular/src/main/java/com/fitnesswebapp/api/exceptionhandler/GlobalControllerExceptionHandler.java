@@ -1,16 +1,24 @@
 package com.fitnesswebapp.api.exceptionhandler;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import javax.validation.ConstraintViolationException;
+import javax.validation.Path.Node;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -25,6 +33,7 @@ import com.fitnesswebapp.domain.exception.NutritionixApiCallException;
 import com.fitnesswebapp.domain.exception.UserAlreadyExistsException;
 import com.fitnesswebapp.domain.exception.UserNotFoundException;
 import com.fitnesswebapp.utils.BeanNames;
+import com.fitnesswebapp.utils.FitnessConstants;
 
 /**
  * The global controller exception handler.
@@ -37,10 +46,13 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 	private static final String UNEXPECTED_ERROR = "An unexpected error ocurred.";
 	
 	private final MessageLoader messageLoader;
+	private final MessageSource messageSource;
 
 	@Autowired
-	public GlobalControllerExceptionHandler(@Qualifier(BeanNames.FITNESS_MESSAGE_LOADER) final MessageLoader messageLoader) {
+	public GlobalControllerExceptionHandler(@Qualifier(BeanNames.FITNESS_MESSAGE_LOADER) final MessageLoader messageLoader,
+			final MessageSource messageSource) {
 		this.messageLoader = messageLoader;
+		this.messageSource = messageSource;
 	}
 
 	/**
@@ -77,6 +89,38 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 		return handleExceptionInternal(ex, exceptionDetails, new HttpHeaders(), status, request);
 	}
 	
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<?> handleConstraintViolationException(ConstraintViolationException ex, WebRequest request) {
+		ExceptionType exceptionType = ExceptionType.INVALID_DATA;
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		
+		List<ExceptionDetails.Field> exceptionDetailsFields = ex.getConstraintViolations()
+																.stream()
+																.map(constraintViolation -> {
+																	List<Node> pathList = new ArrayList<>();
+																	constraintViolation.getPropertyPath().forEach(path -> {
+																		pathList.add(path);
+																	});
+																	
+																	Node last = pathList.get(pathList.size() - 1); // get only the last field name
+																	return ExceptionDetails.Field.builder()
+																			.name(last.getName())
+																			.index(last.getIndex())
+																			.userMessage(constraintViolation.getMessage())
+																			.build();
+																}).collect(Collectors.toList());
+		
+		final ExceptionDetails exceptionDetails = ExceptionDetails.builder()
+																.timestamp(LocalDateTime.now())
+																.status(status.value())
+																.type(exceptionType.getUri())
+																.title(exceptionType.getTitle())
+																.fields(exceptionDetailsFields)
+																.build();
+		
+		return handleExceptionInternal(ex, exceptionDetails, new HttpHeaders(), status, request);
+	}
+	
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		Throwable rootCause = ExceptionUtils.getRootCause(ex);
@@ -101,6 +145,33 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 	}
 	
 	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ExceptionType exceptionType = ExceptionType.INVALID_DATA;
+
+		// Generate a list containing the field name and the error message regarding field value
+		List<ExceptionDetails.Field> exceptionDetailsFields = ex.getBindingResult()
+														.getFieldErrors()
+														.stream()
+														.map(fieldError -> {
+															String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+															
+															return ExceptionDetails.Field.builder()
+																	.name(fieldError.getField())
+																	.userMessage(message)
+																	.build();
+														}).collect(Collectors.toList());
+		 
+		 final ExceptionDetails exceptionDetails = ExceptionDetails.builder().timestamp(LocalDateTime.now())
+					.status(status.value())
+					.type(exceptionType.getUri())
+					.title(exceptionType.getTitle())
+					.fields(exceptionDetailsFields)
+					.build();
+		
+		return handleExceptionInternal(ex, exceptionDetails, new HttpHeaders(), status, request);
+	}
+	
+	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		if (body == null) {
 			body = ExceptionDetails.builder().timestamp(LocalDateTime.now())
@@ -121,11 +192,12 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 		return super.handleExceptionInternal(ex, body, headers, status, request);
 	}
 	
+	
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String path = ex.getPath().stream()
 							.map(ref -> ref.getFieldName())
 							.filter(Objects::nonNull)
-							.collect(Collectors.joining("."));
+							.collect(Collectors.joining(FitnessConstants.DOT));
 		
 		ExceptionType exceptionType = ExceptionType.INCOMPREHENSIBLE_MESSAGE;
 		String detail = String.format("The property '%s' received a value '%s' which is an invalid type. Please provide a value compatible with type '%s'.", path, ex.getValue(), ex.getTargetType().getSimpleName());

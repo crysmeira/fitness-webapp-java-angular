@@ -16,6 +16,7 @@ public enum ExceptionType {
 	SYSTEM_ERROR("System error", "/system-error"),
 	INCOMPREHENSIBLE_MESSAGE("Incomprehensible message", "/incomprehensible-message"),
 	INVALID_METHOD("Invalid method", "/invalid-method"),
+	INVALID_DATA("Invalid data", "/invalid-data"),
 	INVALID_PARAMETER("Invalid parameter", "/invalid-parameter");
 
 	private String title;
