@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,9 +32,13 @@ import com.fitnesswebapp.api.assembler.fitness.UserInputDisassembler;
 import com.fitnesswebapp.api.assembler.fitness.UserModelAssembler;
 import com.fitnesswebapp.api.model.fitness.UserModel;
 import com.fitnesswebapp.api.model.fitness.input.UserInput;
+import com.fitnesswebapp.core.validation.NotUpdatable;
+import com.fitnesswebapp.domain.exception.InvalidInputException;
+import com.fitnesswebapp.domain.exception.ValidationException;
 import com.fitnesswebapp.domain.model.fitness.User;
 import com.fitnesswebapp.domain.service.UserService;
 import com.fitnesswebapp.utils.BeanNames;
+import com.fitnesswebapp.utils.ErrorCodes;
 
 /**
  * Handles the requests to Fitness Webapp for user operations.
@@ -46,14 +52,17 @@ public class UserController {
 	private final UserService userService;
 	private final UserModelAssembler userModelAssembler;
 	private final UserInputDisassembler userInputDisassembler;
+	private final SmartValidator validator;
 
 	@Autowired
 	public UserController(@Qualifier(BeanNames.USER_SERVICE) final UserService userService,
 			@Qualifier(BeanNames.USER_MODEL_ASSEMBLER) final UserModelAssembler userModelAssembler,
-			@Qualifier(BeanNames.USER_INPUT_DISASSEMBLER) final UserInputDisassembler userInputDisassembler) {
+			@Qualifier(BeanNames.USER_INPUT_DISASSEMBLER) final UserInputDisassembler userInputDisassembler,
+			final SmartValidator validator) {
 		this.userService = userService;
 		this.userModelAssembler = userModelAssembler;
 		this.userInputDisassembler = userInputDisassembler;
+		this.validator = validator;
 	}
 
 	/**
@@ -110,11 +119,22 @@ public class UserController {
 	@PatchMapping("/{email}")
 	public UserModel partialUpdate(@PathVariable String email, @RequestBody Map<String, Object> fields, HttpServletRequest request) {
 		User user = userService.getUser(email);
-		
+
 		merge(fields, user, request);
+		validate(user, "user");
 		User updatedUser = userService.updateUser(email, user);
 		
 		return userModelAssembler.toModel(updatedUser);
+	}
+	
+	private void validate(User currentUser, String objectName) {
+		BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(currentUser, objectName);
+		validator.validate(currentUser, bindingResult);
+		
+		if (bindingResult.hasErrors()) {
+			throw new ValidationException(bindingResult);
+		}
+		
 	}
 	
 	private void merge(Map<String, Object> sourceData, User targetUser, HttpServletRequest request) {
@@ -127,6 +147,9 @@ public class UserController {
 			
 			sourceData.forEach((propertyName, propertyValue) -> {
 				Field field = ReflectionUtils.findField(User.class, propertyName);
+				if (field.isAnnotationPresent(NotUpdatable.class)) {
+					throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400001, new String[] {propertyName});
+				}
 				field.setAccessible(true);
 				
 				Object newValue = ReflectionUtils.getField(field, sourceUser);

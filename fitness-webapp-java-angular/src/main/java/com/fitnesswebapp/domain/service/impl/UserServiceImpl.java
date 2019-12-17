@@ -1,5 +1,9 @@
 package com.fitnesswebapp.domain.service.impl;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import com.fitnesswebapp.core.validation.NotUpdatable;
 import com.fitnesswebapp.domain.exception.InvalidInputException;
 import com.fitnesswebapp.domain.exception.UserAlreadyExistsException;
 import com.fitnesswebapp.domain.exception.UserNotFoundException;
@@ -85,7 +90,8 @@ public class UserServiceImpl implements UserService {
 			throw new UserNotFoundException(HttpStatus.NOT_FOUND, ErrorCodes.ERROR_404007);
 		}
 		
-		BeanUtils.copyProperties(user, retrievedUser, "userId", "email");
+		String[] ignoreFields = getAllIgnoreFields();
+		BeanUtils.copyProperties(user, retrievedUser, ignoreFields);
 
 		return userRepository.save(retrievedUser);
 	}
@@ -107,5 +113,18 @@ public class UserServiceImpl implements UserService {
 		userRepository.delete(user);
 
 		logger.debug("Deleted user for email '{}'.", email);
+	}
+	
+	private String[] getAllIgnoreFields() {
+		List<String> ignore = new ArrayList<>();
+		
+        Field[] fields = User.class.getDeclaredFields();
+        for (Field f : fields) {
+        	if (f.isAnnotationPresent(NotUpdatable.class)) {
+        		ignore.add(f.getName());
+        	}
+        }
+        
+        return ignore.stream().toArray(String[]::new);
 	}
 }

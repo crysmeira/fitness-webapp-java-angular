@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fitnesswebapp.core.validation.NotUpdatable;
 
 import lombok.Data;
 
@@ -24,6 +25,7 @@ import lombok.Data;
 @Entity
 public class User {
 
+	@NotUpdatable
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
@@ -35,6 +37,7 @@ public class User {
 	@Column(name = "last_name")
 	private String lastName;
 
+	@NotUpdatable
 	@Column(name = "email")
 	private String email;
 
