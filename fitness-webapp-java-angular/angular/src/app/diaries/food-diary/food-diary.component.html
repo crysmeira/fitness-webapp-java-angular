@@ -1,0 +1,26 @@
+<div class="container">
+    <h1>Food Diary</h1>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-md-offset-3">
+            <form class="example-form">
+                <div class="row">
+                    <div class="col-xs-12 col-md-6 col-md-offset-3">
+                        <mat-form-field class="example-full-width full-width">
+                            <input matInput type="search" class="full-width" placeholder="Food to search">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-xs-12 col-md-6 col-md-offset-3">
+                        <button mat-flat-button type="submit" class="full-width" color="primary">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <app-food-diary-query-result></app-food-diary-query-result>
+
+    <h2>Summary</h2>
+
+    <app-food-diary-summary></app-food-diary-summary>
+</div>

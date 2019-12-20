@@ -53,9 +53,6 @@ public class User {
 	@Column(name = "height")
 	private Integer height;
 
-	@Column(name = "enabled")
-	private Boolean enabled;
-
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<ExerciseDiaryEntry> exerciseDiaryEntries;
@@ -82,8 +79,6 @@ public class User {
 		builder.append(weight);
 		builder.append(", height=");
 		builder.append(height);
-		builder.append(", enabled=");
-		builder.append(enabled);
 		builder.append("]");
 		return builder.toString();
 	}

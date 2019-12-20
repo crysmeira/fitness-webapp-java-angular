@@ -1,0 +1,59 @@
+<div class="container">
+    <h1>Profile</h1>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <mat-card class="example-card">
+                <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Profile photo">
+            </mat-card>
+        </div>
+        <div class="col-md-8">
+            <form class="example-form">
+                <h4>About me </h4>
+            
+                <table class="example-full-width" cellspacing="0">
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="First name">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Last Name">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                </table>
+
+                <mat-form-field class="example-full-width">
+                    <input matInput type="email" placeholder="Email (disabled)" disabled value="your_email@here.com">
+                </mat-form-field>
+                
+                <table class="example-full-width" cellspacing="0">
+                    <tr>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <input matInput [matDatepicker]="picker" placeholder="Birthday">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Height">
+                            </mat-form-field>
+                        </td>
+                        <td>
+                            <mat-form-field class="example-full-width">
+                                <input matInput placeholder="Weight">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                </table>
+
+                <button mat-flat-button type="submit" (click)="onUpdateProfile()" color="primary">Update</button>
+            </form>
+        </div>
+    </div>
+</div>

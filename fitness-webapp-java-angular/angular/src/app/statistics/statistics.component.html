@@ -1,0 +1,106 @@
+<div class="container">
+    <h1>Statistics</h1>
+
+    <mat-accordion>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    1 day
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+        
+            <div class="flex-item">
+                <div style="display: block;">
+                <canvas baseChart width="400" height="400"
+                            [datasets]="lineChartData"
+                            [labels]="lineChartLabels"
+                            [options]="lineChartOptions"
+                            [colors]="lineChartColors"
+                            [legend]="lineChartLegend"
+                            [chartType]="lineChartType"
+                            [plugins]="lineChartPlugins"></canvas>
+                </div>
+            </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    7 days
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="flex-item">
+                <div style="display: block;">
+                <canvas baseChart width="400" height="400"
+                            [datasets]="lineChartData"
+                            [labels]="lineChartLabels"
+                            [options]="lineChartOptions"
+                            [colors]="lineChartColors"
+                            [legend]="lineChartLegend"
+                            [chartType]="lineChartType"
+                            [plugins]="lineChartPlugins"></canvas>
+                </div>
+            </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    30 days
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+        
+            <div class="flex-item">
+                <div style="display: block;">
+                <canvas baseChart width="400" height="400"
+                            [datasets]="lineChartData"
+                            [labels]="lineChartLabels"
+                            [options]="lineChartOptions"
+                            [colors]="lineChartColors"
+                            [legend]="lineChartLegend"
+                            [chartType]="lineChartType"
+                            [plugins]="lineChartPlugins"></canvas>
+                </div>
+            </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    180 days
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+        
+            <div class="flex-item">
+                <div style="display: block;">
+                <canvas baseChart width="400" height="400"
+                            [datasets]="lineChartData"
+                            [labels]="lineChartLabels"
+                            [options]="lineChartOptions"
+                            [colors]="lineChartColors"
+                            [legend]="lineChartLegend"
+                            [chartType]="lineChartType"
+                            [plugins]="lineChartPlugins"></canvas>
+                </div>
+            </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    365 days
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+        
+            <div class="flex-item">
+                <div style="display: block;">
+                <canvas baseChart width="400" height="400"
+                            [datasets]="lineChartData"
+                            [labels]="lineChartLabels"
+                            [options]="lineChartOptions"
+                            [colors]="lineChartColors"
+                            [legend]="lineChartLegend"
+                            [chartType]="lineChartType"
+                            [plugins]="lineChartPlugins"></canvas>
+                </div>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

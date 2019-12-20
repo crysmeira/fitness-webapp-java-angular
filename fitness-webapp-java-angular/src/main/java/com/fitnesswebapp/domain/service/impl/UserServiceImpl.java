@@ -56,7 +56,6 @@ public class UserServiceImpl implements UserService {
 		}
 
 		user.setPassword(user.getPassword());
-		user.setEnabled(true);
 
 		return userRepository.save(user);
 	}

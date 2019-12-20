@@ -22,6 +22,5 @@ public class UserModel {
 	private LocalDate birthDate;
 	private Double weight;
 	private Integer height;
-	private Boolean enabled;
 
 }
