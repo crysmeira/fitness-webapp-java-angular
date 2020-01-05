@@ -6,7 +6,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ChartsModule } from 'ng2-charts';
-import { Routes } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,10 +20,13 @@ import { FoodDiarySummaryComponent } from './diaries/food-diary/food-diary-summa
 import { FoodDiaryQueryResultComponent } from './diaries/food-diary/food-diary-query-result/food-diary-query-result.component';
 import { AuthComponent } from './auth/auth.component';
 import { StatisticsComponent } from './statistics/statistics.component';
-
-const appRoutes: Routes = [
-  { path: '', redirectTo: '/food-diary', pathMatch: 'full'}
-];
+import { DropdownDirective } from './dropdown.directive';
+import { ProfileService } from './profile/profile.service';
+import { FoodDiaryService } from './diaries/food-diary/food-diary.service';
+import { ExerciseDiaryService } from './diaries/exercise-diary/exercise-diary.service';
+import { TodayDiaryService } from './diaries/today-diary/today-diary.service';
+import { StatisticsService } from './statistics/statistics.service';
+import { AuthService } from './auth/auth.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +39,8 @@ const appRoutes: Routes = [
     FoodDiarySummaryComponent,
     FoodDiaryQueryResultComponent,
     AuthComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    DropdownDirective
   ],
   imports: [
     BrowserModule,
@@ -52,9 +56,18 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     FormsModule,
     MatExpansionModule,
-    ChartsModule
+    ChartsModule,
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    ProfileService,
+    FoodDiaryService,
+    ExerciseDiaryService,
+    TodayDiaryService,
+    StatisticsService,
+    AuthService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -6,16 +6,25 @@
       </button>
       <a routerLink="/" class="navbar-brand">Fitness WebApp</a>
     </div>
-    <div class="navbar-collapse" [class.collapse]="collapsed" (window:resize)="collapsed = true">
+    <div class="navbar-collapse" [class.collapse]="collapsed" (window:resize)="collapsed=true" appDropdown>
       <ul class="nav navbar-nav">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" role="button">Diaries <span class="caret"></span></a>
+        <li routerLinkActive="active"><a routerLink="/profile">Profile</a></li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li class="dropdown" appDropdown>
+          <a style="cursor: pointer" class="dropdown-toggle" role="button">Diaries <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Food diary 2</a></li>
-            <li><a href="#">Exercise diary 2</a></li>
-            <li><a href="#">Today diary 2</a></li>
+            <li><a style="cursor: pointer" routerLink="/food-diary">Food diary</a></li>
+            <li><a style="cursor: pointer" routerLink="/exercise-diary">Exercise diary</a></li>
+            <li><a style="cursor: pointer" routerLink="/today-diary" (click)="onGetTodayDiary()">Today diary</a></li>
           </ul>
         </li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li routerLinkActive="active"><a routerLink="/statistics">Statistics</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a routerLink="/auth">Logout</a></li>
       </ul>
     </div>
   </div>

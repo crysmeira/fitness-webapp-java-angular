@@ -1,3 +1,5 @@
+<app-header></app-header>
+
 <div class="container">
     <h1>Profile</h1>
     
@@ -8,37 +10,39 @@
             </mat-card>
         </div>
         <div class="col-md-8">
-            <form class="example-form">
+            <form class="example-form" (ngSubmit)="onUpdateProfile(f)" #f="ngForm">
                 <h4>About me </h4>
             
                 <table class="example-full-width" cellspacing="0">
                     <tr>
                         <td>
-                            <input class="form-control" placeholder="First name">
+                            <input class="form-control" placeholder="First name" type="text" id="firstName" name="firstName" ngModel required>
                         </td>
                         <td>
-                            <input class="form-control"  placeholder="Last Name">
+                            <input class="form-control"  placeholder="Last Name" type="text" id="lastName" name="lastName" ngModel required>
                         </td>
                     </tr>
                 </table>
 
-                <input class="form-control" type="email" placeholder="Email (disabled)" disabled value="your_email@here.com">
+                <input class="form-control" type="email" placeholder="Email (disabled)" disabled value="your_email@here.com" id="email" name="email" ngModel>
                 
                 <table class="example-full-width" cellspacing="0">
                     <tr>
                         <td>
-                                <input class="form-control" type="date" placeholder="Birthday">
+                            <input class="form-control" type="date" placeholder="Birthday" id="birthday" name="birthday" ngModel>
                         </td>
                         <td>
-                            <input class="form-control"  placeholder="Height">
+                            <input class="form-control" placeholder="Height" type="number" id="height" name="height" ngModel pattern="^[1-9]+[0-9]*$">
                         </td>
                         <td>
-                            <input class="form-control"  placeholder="Weight">
+                            <input class="form-control" placeholder="Weight" type="number" id="weight" name="weight" ngModel pattern="^[1-9]+[0-9]*$">
                         </td>
                     </tr>
                 </table>
 
-                <button mat-flat-button type="submit" (click)="onUpdateProfile()" color="primary">Update</button>
+                <button mat-flat-button type="submit" color="primary" [disabled]="!f.valid">Update</button> | 
+                <button mat-flat-button type="button" color="primary" (click)="onDeleteProfile(f)">Delete</button>
+                
             </form>
         </div>
     </div>

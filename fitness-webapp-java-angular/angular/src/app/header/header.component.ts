@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { TodayDiaryService } from '../diaries/today-diary/today-diary.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
   collapsed = true;
   
-  constructor() { }
+  constructor(private todayDiaryService: TodayDiaryService) { }
 
-  ngOnInit() {
+  onGetTodayDiary() {
+    this.todayDiaryService.getFoodDiaries();
+    this.todayDiaryService.getExerciseDiaries();
   }
 
 }
