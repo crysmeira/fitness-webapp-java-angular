@@ -75,7 +75,7 @@ Fitness web app uses Nutritionix API to provide its users with nutritional infor
 </p>
 
 <p align="center">
-  <img src="https://github.com/crysmeira/fitness-webapp-java-angular/blob/master/fitness-webapp-java-angular/images/foodDiary3.png" width="800">
+  <img src="https://github.com/crysmeira/fitness-webapp-java-angular/blob/master/fitness-webapp-java-angular/images/foodDiary4.png" width="800">
 </p>
 
 * Exercise diary
