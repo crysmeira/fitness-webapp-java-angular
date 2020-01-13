@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
-import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material/core';
+import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
+import { MatSnackBar } from '@angular/material';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -16,7 +19,10 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css']
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent {
+
+  credentials = {email: '', password: ''};
+  isLoginMode = true;
 
   emailFormControl = new FormControl('', [
     Validators.required,
@@ -29,21 +35,52 @@ export class AuthComponent implements OnInit {
 
   matcher = new MyErrorStateMatcher();
 
-  isLoginMode = true;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
+  constructor(private authService: AuthService, 
+              private _snackBar: MatSnackBar,
+              private router: Router) { }
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
   }
 
   onSubmit(form: NgForm) {
-    console.log(form);
-    console.log(form.controls['email'].value);
-    console.log(form.controls['password'].value);
+    this.credentials.email = form.controls['email'].value;
+    this.credentials.password = form.controls['password'].value;
     form.reset();
+
+    if (this.isLoginMode) {
+      this.login();
+    } else {
+      this.signup();
+    }
+  }
+
+  login() {
+    this.authService.authenticate(this.credentials, () => {
+        this.router.navigateByUrl('/home');
+    });
+
+    return false;
+  }
+
+  signup() {
+    this.authService.signup(this.credentials)
+                  .subscribe(response => {
+                    this.openSnackBar('Successfully registered email: ' + response['email']);
+                  }, error => {
+                    this.openSnackBar(error.error.detail);
+                  });
+    this.isLoginMode = true;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigateByUrl('/home');
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, null, {
+      duration: 5000,
+    });
   }
 }

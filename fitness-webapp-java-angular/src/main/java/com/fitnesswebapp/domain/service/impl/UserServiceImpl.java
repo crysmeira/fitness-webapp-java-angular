@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.fitnesswebapp.core.validation.NotUpdatable;
@@ -21,6 +22,7 @@ import com.fitnesswebapp.domain.repository.UserRepository;
 import com.fitnesswebapp.domain.service.UserService;
 import com.fitnesswebapp.utils.BeanNames;
 import com.fitnesswebapp.utils.ErrorCodes;
+import com.fitnesswebapp.utils.FitnessConstants;
 
 /**
  * Implementation of {@link UserService}.
@@ -33,10 +35,13 @@ public class UserServiceImpl implements UserService {
 	private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
 	private final UserRepository userRepository;
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
-	public UserServiceImpl(final UserRepository usersRepository) {
-		userRepository = usersRepository;
+	public UserServiceImpl(final UserRepository usersRepository,
+			BCryptPasswordEncoder bCryptPasswordEncoder) {
+		this.userRepository = usersRepository;
+		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 	}
 
 	/**
@@ -55,7 +60,9 @@ public class UserServiceImpl implements UserService {
 					                   new String[] {user.getEmail()});
 		}
 
-		user.setPassword(user.getPassword());
+		user.setUsername(user.getEmail());
+		user.setRole(FitnessConstants.USER_ROLE);
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
 		return userRepository.save(user);
 	}

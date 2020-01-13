@@ -1,3 +1,7 @@
 .flex-item {
-    width: 50%
+    width: 45%
+}
+
+.selector {
+    margin-bottom: 20px;
 }

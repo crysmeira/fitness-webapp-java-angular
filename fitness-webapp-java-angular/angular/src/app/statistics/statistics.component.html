@@ -3,106 +3,110 @@
 <div class="container">
     <h1>Statistics</h1>
 
+    <div class="row selector">
+        <div class="col-xs-12 col-md-4 col-md-offset-4">
+            <form class="example-form" (ngSubmit)="onLoadStatistics(f)" #f="ngForm">            
+                <select name="period" class="form-control" [(ngModel)]="selectedPeriod" required>
+                    <option disabled [ngValue]="null">Please select the period</option> 
+                    <option *ngFor="let period of periods" [ngValue]="period.value">{{ period.name }}</option>
+                </select>
+                
+                <button mat-flat-button class="form-control" type="submit" color="primary" [disabled]="!f.valid">Load</button>
+            </form>
+        </div>
+    </div>
+
     <mat-accordion>
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    1 day
+                    Exercise Statistics
                 </mat-panel-title>
             </mat-expansion-panel-header>
         
-            <div class="flex-item">
-                <div style="display: block;">
-                <canvas baseChart width="400" height="400"
-                            [datasets]="lineChartData"
-                            [labels]="lineChartLabels"
-                            [options]="lineChartOptions"
-                            [colors]="lineChartColors"
-                            [legend]="lineChartLegend"
-                            [chartType]="lineChartType"
-                            [plugins]="lineChartPlugins"></canvas>
+            <div class="row">
+                <div class="flex-item col-md-6" *ngIf="exercisesCaloriesBurnedData.length > 0">
+                    <div style="display: block;">
+                    <canvas baseChart width="400" height="400"
+                                [datasets]="exercisesCaloriesBurnedData"
+                                [labels]="exercisesLabels"
+                                [chartType]="lineChartType"></canvas>
+                    </div>
+                </div>
+                <div class="flex-item col-md-6" *ngIf="exercisesDurationData.length > 0">
+                    <div style="display: block;">
+                    <canvas baseChart width="400" height="400"
+                                [datasets]="exercisesDurationData"
+                                [labels]="exercisesLabels"
+                                [chartType]="lineChartType"></canvas>
+                    </div>
                 </div>
             </div>
         </mat-expansion-panel>
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    7 days
+                    Food Statistics
                 </mat-panel-title>
             </mat-expansion-panel-header>
 
-            <div class="flex-item">
-                <div style="display: block;">
-                <canvas baseChart width="400" height="400"
-                            [datasets]="lineChartData"
-                            [labels]="lineChartLabels"
-                            [options]="lineChartOptions"
-                            [colors]="lineChartColors"
-                            [legend]="lineChartLegend"
-                            [chartType]="lineChartType"
-                            [plugins]="lineChartPlugins"></canvas>
+            <div class="row">
+                <div class="flex-item col-md-6" *ngIf="foodCaloriesData.length > 0">
+                    <div style="display: block;">
+                    <canvas baseChart width="400" height="400"
+                                [datasets]="foodCaloriesData"
+                                [labels]="foodLabels"
+                                [chartType]="lineChartType"></canvas>
+                    </div>
+                </div>
+
+                <div class="flex-item col-md-6" *ngIf="foodFatData.length > 0">
+                    <div style="display: block;">
+                    <canvas baseChart width="400" height="400"
+                                [datasets]="foodCarbohydrateData"
+                                [labels]="foodLabels"
+                                [chartType]="lineChartType"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="flex-item col-md-6" *ngIf="foodProteinData.length > 0">
+                    <div style="display: block;">
+                    <canvas baseChart width="400" height="400"
+                                [datasets]="foodProteinData"
+                                [labels]="foodLabels"
+                                [chartType]="lineChartType"></canvas>
+                    </div>
+                </div>
+
+                <div class="flex-item col-md-6" *ngIf="foodCarbohydrateData.length > 0">
+                    <div style="display: block;">
+                    <canvas baseChart width="400" height="400"
+                                [datasets]="foodFatData"
+                                [labels]="foodLabels"
+                                [chartType]="lineChartType"></canvas>
+                    </div>
                 </div>
             </div>
         </mat-expansion-panel>
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    30 days
+                    Nutrients
                 </mat-panel-title>
             </mat-expansion-panel-header>
         
-            <div class="flex-item">
-                <div style="display: block;">
-                <canvas baseChart width="400" height="400"
-                            [datasets]="lineChartData"
-                            [labels]="lineChartLabels"
-                            [options]="lineChartOptions"
-                            [colors]="lineChartColors"
-                            [legend]="lineChartLegend"
-                            [chartType]="lineChartType"
-                            [plugins]="lineChartPlugins"></canvas>
+            <div class="row">
+                <div class="flex-item col-xs-12 col-md-6 col-md-offset-3" *ngIf="nutrientsData.length > 0">
+                    <div style="display: block;">
+                    <canvas baseChart width="400" height="400"
+                                [datasets]="nutrientsData"
+                                [labels]="nutrientsLabels"
+                                [chartType]="barChartType"></canvas>
+                    </div>
                 </div>
             </div>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    180 days
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-        
-            <div class="flex-item">
-                <div style="display: block;">
-                <canvas baseChart width="400" height="400"
-                            [datasets]="lineChartData"
-                            [labels]="lineChartLabels"
-                            [options]="lineChartOptions"
-                            [colors]="lineChartColors"
-                            [legend]="lineChartLegend"
-                            [chartType]="lineChartType"
-                            [plugins]="lineChartPlugins"></canvas>
-                </div>
-            </div>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    365 days
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-        
-            <div class="flex-item">
-                <div style="display: block;">
-                <canvas baseChart width="400" height="400"
-                            [datasets]="lineChartData"
-                            [labels]="lineChartLabels"
-                            [options]="lineChartOptions"
-                            [colors]="lineChartColors"
-                            [legend]="lineChartLegend"
-                            [chartType]="lineChartType"
-                            [plugins]="lineChartPlugins"></canvas>
-                </div>
-            </div>
-        </mat-expansion-panel>
+            </mat-expansion-panel>
     </mat-accordion>
 </div>

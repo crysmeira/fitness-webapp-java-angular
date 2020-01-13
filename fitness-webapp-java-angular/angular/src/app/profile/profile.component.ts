@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ProfileService } from './profile.service';
+import { Router } from '@angular/router';
 import { Profile } from './profile.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-profile',
@@ -11,23 +13,61 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {  
 
+  @Input() firstName;
+  @Input() lastName;
+  @Input() email;
+  @Input() birthDate;
+  @Input() height;
+  @Input() weight;
+
   constructor(private profileService: ProfileService,
-          private route: ActivatedRoute,
-          private router: Router) { }
+              private authService: AuthService,
+              private router: Router,
+              private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
+    this.onLoadProfile();
+  }
+
+  onLoadProfile() {
+    this.profileService.loadProfile()
+                .subscribe(profile => {
+                  this.firstName = profile.firstName;
+                  this.lastName = profile.lastName;
+                  this.email = profile.email;
+                  this.birthDate = profile.birthDate;
+                  this.height = profile.height;
+                  this.weight = profile.weight;
+                }, error => {
+                  this.openSnackBar(error.error.detail);
+                });
   }
 
   onUpdateProfile(form: NgForm) {
     const value = form.value;
-    const profile = new Profile(value.firstName, value.lastName, value.email, value.birthday, value.height, value.weight);
-    this.profileService.editProfile(profile);
+    const profile = new Profile(value.firstName, value.lastName, form.controls['email'].value, value.birthDate, value.height, value.weight);
+    this.profileService.editProfile(profile)
+                    .subscribe(response => {
+                      this.openSnackBar('User was successfully updated');
+                    }, error => {
+                      this.openSnackBar(error.error.detail);
+                    });
   }
 
-  onDeleteProfile(form: NgForm) {
-    console.log("Deleting... " + form.value.email);
-    const profile = new Profile('name', 'surname', 'email@email.com', 23214, 32, 123);
-    this.profileService.deleteProfile(profile);
-    this.router.navigate(['/auth']);
+  onDeleteProfile() {
+    this.profileService.deleteProfile()
+                    .subscribe(response => {
+                      this.openSnackBar('User was successfully deleted');
+                    }, error => {
+                      this.openSnackBar(error.error.detail);
+                    });
+    this.authService.logout();
+    this.router.navigate(['/home']);
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, null, {
+      duration: 5000,
+    });
   }
 }

@@ -29,4 +29,6 @@ public class FitnessConstants {
 	public static final String STATISTICS_FAT = "fat";
 	public static final String STATISTICS_PROTEIN = "protein";
 	public static final String STATISTICS_DURATION = "duration";
+	
+	public static final String USER_ROLE = "USER";
 }

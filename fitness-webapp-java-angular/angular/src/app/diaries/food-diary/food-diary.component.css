@@ -5,3 +5,7 @@ table {
 .full-width {
   width: 100%;
 }
+
+.selector {
+  margin-bottom: 20px;
+}

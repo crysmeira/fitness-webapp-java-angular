@@ -1,0 +1,8 @@
+<app-header></app-header>
+
+<div class="container">
+    <h1>Welcome to Fitness WebApp!</h1>
+
+    <h4 *ngIf="authService.isUserLoggedIn()">You are logged in.</h4>
+    <h4 *ngIf="!authService.isUserLoggedIn()">Please <a style="cursor: pointer" routerLink="/auth">login or sign up</a> to access Fitness WebApp.</h4>
+</div>

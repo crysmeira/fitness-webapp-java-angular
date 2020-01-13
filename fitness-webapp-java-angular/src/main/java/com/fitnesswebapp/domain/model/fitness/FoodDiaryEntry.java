@@ -27,9 +27,6 @@ public class FoodDiaryEntry {
 	@Column(name = "food_diary_entry_id")
 	private Long foodDiaryEntryId;
 
-	@Column(name = "nutritionix_id")
-	private String id;
-
 	@Column(name = "food_name")
 	private String foodName;
 
@@ -57,8 +54,6 @@ public class FoodDiaryEntry {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("FoodDiaryEntry [foodDiaryEntryId=");
 		builder.append(foodDiaryEntryId);
-		builder.append(", id=");
-		builder.append(id);
 		builder.append(", foodName=");
 		builder.append(foodName);
 		builder.append(", calories=");

@@ -1,3 +1,3 @@
 export class FoodDiary {
-    constructor(public id: number, public foodName: string, public calories: number, public carbohydrate: number, public protein: number, public fat: number) { }
+    constructor(public foodName: string, public calories: number, public totalCarbohydrate: number, public totalFat: number, public totalProtein: number) { }
 }

@@ -53,7 +53,7 @@ public class FoodDiaryEntryServiceImpl implements FoodDiaryEntryService {
 		}
 
 		LocalDate today = LocalDate.now();
-		today = LocalDate.now().minusDays(new Random().nextInt(1000));
+		today = LocalDate.now();
 		if (isThereFoodDiaryForToday(user.getUserId(), today)) {
 			throw new FoodDiaryEntryAlreadyExistsException(HttpStatus.CONFLICT, ErrorCodes.ERROR_409001, new String[] {today.toString()});
 		}

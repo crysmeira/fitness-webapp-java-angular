@@ -12,9 +12,6 @@ import lombok.Data;
  */
 @Data
 public class FoodDiaryEntryInput {
-
-	@NotBlank
-	private String id; 
 	
 	@NotBlank
 	private String foodName;

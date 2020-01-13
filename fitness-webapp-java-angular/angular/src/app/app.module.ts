@@ -7,17 +7,17 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ChartsModule } from 'ng2-charts';
 import { HttpClientModule } from '@angular/common/http';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FoodDiaryComponent } from './diaries/food-diary/food-diary.component';
+import { FoodDiaryComponent, DialogFoodAmountDialog } from './diaries/food-diary/food-diary.component';
 import { ExerciseDiaryComponent } from './diaries/exercise-diary/exercise-diary.component';
 import { TodayDiaryComponent } from './diaries/today-diary/today-diary.component';
 import { HeaderComponent } from './header/header.component';
 import { ProfileComponent } from './profile/profile.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { FoodDiarySummaryComponent } from './diaries/food-diary/food-diary-summary/food-diary-summary.component';
-import { FoodDiaryQueryResultComponent } from './diaries/food-diary/food-diary-query-result/food-diary-query-result.component';
 import { AuthComponent } from './auth/auth.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { DropdownDirective } from './dropdown.directive';
@@ -27,6 +27,7 @@ import { ExerciseDiaryService } from './diaries/exercise-diary/exercise-diary.se
 import { TodayDiaryService } from './diaries/today-diary/today-diary.service';
 import { StatisticsService } from './statistics/statistics.service';
 import { AuthService } from './auth/auth.service';
+import { HomeComponent } from './home.component';
 
 @NgModule({
   declarations: [
@@ -36,11 +37,11 @@ import { AuthService } from './auth/auth.service';
     TodayDiaryComponent,
     HeaderComponent,
     ProfileComponent,
-    FoodDiarySummaryComponent,
-    FoodDiaryQueryResultComponent,
     AuthComponent,
     StatisticsComponent,
-    DropdownDirective
+    HomeComponent,
+    DropdownDirective,
+    DialogFoodAmountDialog
   ],
   imports: [
     BrowserModule,
@@ -58,7 +59,9 @@ import { AuthService } from './auth/auth.service';
     MatExpansionModule,
     ChartsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDialogModule,
+    MatSnackBarModule
   ],
   providers: [
     ProfileService,
@@ -68,6 +71,7 @@ import { AuthService } from './auth/auth.service';
     StatisticsService,
     AuthService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [DialogFoodAmountDialog]
 })
 export class AppModule { }

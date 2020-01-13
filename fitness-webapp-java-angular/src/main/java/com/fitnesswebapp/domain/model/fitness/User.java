@@ -37,6 +37,9 @@ public class User {
 	@Column(name = "last_name")
 	private String lastName;
 
+	@Column(name = "username")
+	private String username;
+	
 	@NotUpdatable
 	@Column(name = "email")
 	private String email;
@@ -52,6 +55,9 @@ public class User {
 
 	@Column(name = "height")
 	private Integer height;
+	
+	@Column(name = "role")
+	private String role;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -70,6 +76,8 @@ public class User {
 		builder.append(firstName);
 		builder.append(", lastName=");
 		builder.append(lastName);
+		builder.append(", username=");
+		builder.append(username);
 		builder.append(", email=");
 		builder.append(email);
 		builder.append(", password=******");

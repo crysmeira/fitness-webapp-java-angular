@@ -1,6 +1,7 @@
 package com.fitnesswebapp.api.controller;
 
 import java.lang.reflect.Field;
+import java.security.Principal;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,17 +30,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fitnesswebapp.api.assembler.fitness.UserInputDisassembler;
 import com.fitnesswebapp.api.assembler.fitness.UserModelAssembler;
 import com.fitnesswebapp.api.model.fitness.UserModel;
 import com.fitnesswebapp.api.model.fitness.input.UserInput;
 import com.fitnesswebapp.core.validation.NotUpdatable;
-import com.fitnesswebapp.domain.exception.InvalidInputException;
 import com.fitnesswebapp.domain.exception.ValidationException;
 import com.fitnesswebapp.domain.model.fitness.User;
 import com.fitnesswebapp.domain.service.UserService;
 import com.fitnesswebapp.utils.BeanNames;
-import com.fitnesswebapp.utils.ErrorCodes;
 
 /**
  * Handles the requests to Fitness Webapp for user operations.
@@ -47,6 +48,7 @@ import com.fitnesswebapp.utils.ErrorCodes;
  */
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
 	private final UserService userService;
@@ -64,7 +66,12 @@ public class UserController {
 		this.userInputDisassembler = userInputDisassembler;
 		this.validator = validator;
 	}
-
+	
+	@GetMapping(value = "/auth")
+	public Principal user(Principal user) {
+		return user;
+	}
+	
 	/**
 	 * Creates a user.
 	 *
@@ -119,7 +126,7 @@ public class UserController {
 	@PatchMapping("/{email}")
 	public UserModel partialUpdate(@PathVariable String email, @RequestBody Map<String, Object> fields, HttpServletRequest request) {
 		User user = userService.getUser(email);
-
+		
 		merge(fields, user, request);
 		validate(user, "user");
 		User updatedUser = userService.updateUser(email, user);
@@ -140,21 +147,22 @@ public class UserController {
 	private void merge(Map<String, Object> sourceData, User targetUser, HttpServletRequest request) {
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.registerModule(new JavaTimeModule());
 			objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 	
 			User sourceUser = objectMapper.convertValue(sourceData, User.class);
 			
 			sourceData.forEach((propertyName, propertyValue) -> {
+				System.out.println(propertyName);
 				Field field = ReflectionUtils.findField(User.class, propertyName);
-				if (field.isAnnotationPresent(NotUpdatable.class)) {
-					throw new InvalidInputException(HttpStatus.BAD_REQUEST, ErrorCodes.ERROR_400001, new String[] {propertyName});
+				if (!field.isAnnotationPresent(NotUpdatable.class)) {
+					field.setAccessible(true);
+					
+					Object newValue = ReflectionUtils.getField(field, sourceUser);
+					
+					ReflectionUtils.setField(field, targetUser, newValue);
 				}
-				field.setAccessible(true);
-				
-				Object newValue = ReflectionUtils.getField(field, sourceUser);
-				
-				ReflectionUtils.setField(field, targetUser, newValue);
 			});
 		} catch (IllegalArgumentException e) {
 			ServletServerHttpRequest serverHttpRequset = new ServletServerHttpRequest(request);

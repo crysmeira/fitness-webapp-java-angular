@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { TodayDiaryService } from '../diaries/today-diary/today-diary.service';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -9,12 +10,13 @@ import { TodayDiaryService } from '../diaries/today-diary/today-diary.service';
 export class HeaderComponent {
 
   collapsed = true;
-  
-  constructor(private todayDiaryService: TodayDiaryService) { }
 
-  onGetTodayDiary() {
-    this.todayDiaryService.getFoodDiaries();
-    this.todayDiaryService.getExerciseDiaries();
+  constructor(private router: Router,
+              private authService: AuthService) { }
+
+  onLogout() {
+    this.authService.logout();
+    this.router.navigate(['/home']);
   }
 
 }
